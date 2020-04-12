@@ -15,6 +15,8 @@ const Overlay = styled.section`
   z-index: 10;
   text-align: right;
   padding: 0.5em;
+  user-select: none;
+  pointer-events: none;
 `
 
 const Score = styled.span`
