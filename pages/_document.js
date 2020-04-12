@@ -34,7 +34,15 @@ export default class MyDocument extends Document {
           <meta charSet="utf-8" />
           <link rel="stylesheet" href="/_next/static/style.css" />
           <link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon" />
-            <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet"/>
+          <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
+          <script async src="https://www.googletagmanager.com/gtag/js?id=UA-50126719-6"></script>
+          <script dangerouslySetInnerHTML={{__html: `
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments)}
+            gtag('js', new Date());
+
+            gtag('config', 'UA-50126719-6');
+          `}} />
         </Head>
         <body>
           <Main />
