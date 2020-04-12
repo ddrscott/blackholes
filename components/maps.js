@@ -136,8 +136,9 @@ O     O     O     O     O     O
     ]
   },
   onBonus(game) {
-    const {engine, render, bonus_size} = game.state,
-          {width} = render.options,
+    const {m_render} = game;
+    const {bonus_size} = game.state,
+          {width} = m_render.options,
           off_center = x_increment*2,
           ball_x = width / 2 + random(off_center) - (off_center / 2);
     game.addBody(circle(ball_x, 0 - 50, bonus_size, DEFAULT_PUCK_BODY));
@@ -146,14 +147,10 @@ O     O     O     O     O     O
   },
   onPeg(bodyA, bodyB) {
   },
-  onMouseUp({x, y}) {
+  onMouseUp(game, {x, y}) {
     var diameter = 16;
-    const {engine, render} = this.state;
-    const {width} = render.options;
-    Matter.World.add(engine.world,
-      // ragdoll(x, -10, 0.25)
-     Matter.Bodies.circle(x, -diameter, diameter + random(), DEFAULT_PUCK_BODY)
-      // Matter.Bodies.circle(x, y, diameter, DEFAULT_PUCK_BODY)
-    );
+    const {m_render} = game;
+    const {width} = m_render.options;
+    game.addBody(circle(x, -diameter, diameter + random(), DEFAULT_PUCK_BODY));
   }
 }

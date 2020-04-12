@@ -6,15 +6,24 @@ import styled from 'styled-components';
 
 import {ragdoll} from '../components/ragdoll.js'
 
+const {Engine, Render, World, Bodies} = Matter;
+
 const SAVED_STATS = ['score', 'total_clicks'];
 
+const BONUS = {
+  inc: 50,
+  decay: 0.5
+}
+
 const Overlay = styled.section`
-  text-shadow: 2px 2px 10px #000;
+  text-shadow: 0px 0px 8px #333;
   position: absolute;
-  width: 100%;
+  // background: rgba(0, 0, 0, 0.3);
+  width: auto;
+  right: 0;
   z-index: 10;
   text-align: right;
-  padding: 0.5em;
+  padding: 0.25em;
   user-select: none;
   pointer-events: none;
 `
@@ -28,15 +37,9 @@ export class Game extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      engine: null,
-      render: null,
       score: 0,
-      bonus_per_second: 1,
       bonus_delay: 1000,
-      bonus_delay_inc: 50,
-      bonus_delay_decay: 0.5,
       total_clicks: 0,
-      generating: false,
       bonus_size: 8,
       cheat: false,
       transform_scale: 1,
@@ -54,16 +57,14 @@ export class Game extends React.Component {
   }
 
   setupMatter() {
-    if (this.state.engine) {
-      return;
+    if (this.engine) {
+      Matter.Engine.clear(this.engine);
     }
-    var Engine = Matter.Engine,
-        Render = Matter.Render,
-        World = Matter.World,
-        Bodies = Matter.Bodies;
 
     // create an engine
     var engine = Engine.create(); 
+    this.engine = engine;
+
     // react-measure
     // 800 x 480 Out[3]: 1.7777777777777777
     let {height} = this.props;
@@ -111,8 +112,8 @@ export class Game extends React.Component {
           // showMousePosition: true,
         }
     });
+    this.m_render = render;
 
-    // Matter.Bodies.rectangle(x, y, width, height, [options]) -> Body
     var top =    Bodies.rectangle(width / 2, thickness / -2 + 1,      width, thickness, { isStatic: true });
     var bottom = Bodies.rectangle(width / 2, height + (map.y_increment * 2) + (thickness * 0.5), width, thickness, { isStatic: true });
     var left =   Bodies.rectangle( thickness / -2, height / 2,      thickness, height, { isStatic: true });
@@ -134,20 +135,16 @@ export class Game extends React.Component {
         });
 
     Matter.Events.on(mouseConstraint, 'mouseup', (event) => {
-      map.onMouseUp.bind(this)(event.mouse.position);
-      this.state.bonus_delay - this.state.bonus_delay_inc
-      let {total_clicks, bonus_delay, bonus_delay_inc} = this.state;
+      map.onMouseUp(this, event.mouse.position);
+      let {total_clicks, bonus_delay} = this.state;
       total_clicks = total_clicks + 1;
-      bonus_delay = bonus_delay - bonus_delay_inc;
+      bonus_delay = bonus_delay - BONUS.inc;
       if (bonus_delay < 1)
         bonus_delay = 1;
       this.setState({total_clicks, bonus_delay})
     });
     World.add(engine.world, mouseConstraint);
     render.mouse = mouse;
-
-    // setup audio
-    const pings = map.audio.pings.map((src) => new Howl({src}));
 
     // an example of using collisionStart event on an engine
     const PING_VOLUME_CLIP = Math.pow(8, 4);
@@ -174,7 +171,7 @@ export class Game extends React.Component {
         let volume = Math.pow(pair.bodyB.speed, 3) / PING_VOLUME_CLIP;
         volume = volume > 1 ? 1 : volume;
         if (volume > 0.01) {
-          const sound = Matter.Common.choose(pings);
+          const sound = Matter.Common.choose(this.pings);
           //const sound = new Howl({src, volume: (volume > 1 ? 1 : volume)});
           sound.volume(volume, sound.play())
         }
@@ -187,11 +184,10 @@ export class Game extends React.Component {
 
 
     // start evertying
-    Render.run(render);
-    Engine.run(engine);
+    Render.run(this.m_render);
+    Engine.run(this.engine);
 
     this.loadSavedState();
-    this.setState({render, engine})
   }
 
   loadSavedState() {
@@ -208,11 +204,13 @@ export class Game extends React.Component {
   }
 
   onStart() {
-    if (this.state.generating) {
-      // already started
+    if (this.on_second_interval) {
       return;
     }
-    this.setState({generating: true});
+    this.on_second_interval = setInterval(() => this.onSecond(), 1000);
+
+    // setup audio
+    this.pings = map.audio.pings.map((src) => new Howl({src}));
 
     let bonus_generator = () => {
       if (!document.hidden) {
@@ -221,20 +219,18 @@ export class Game extends React.Component {
       window.setTimeout(bonus_generator, this.state.bonus_delay );
     };
     bonus_generator();
-
-    setInterval(() => this.onSecond(), 1000);
   }
 
   addBody(body) {
-    Matter.World.add(this.state.engine.world, body)
+    Matter.World.add(this.engine.world, body)
   }
 
   onSecond() {
     this.saveSavesState();
 
-    let {bonus_delay, bonus_delay_decay} = this.state;
+    let {bonus_delay} = this.state;
 
-    bonus_delay = bonus_delay + (bonus_delay * bonus_delay_decay);
+    bonus_delay = bonus_delay + (bonus_delay * BONUS.decay);
     if (bonus_delay > 1000)
       bonus_delay = 1000;
     this.setState({bonus_delay});
@@ -258,12 +254,15 @@ export class Game extends React.Component {
   }
 
   componentWillUnmount() {
-    const {render, engine} = this.state;
+    if (this.on_second_interval) {
+      clearInterval(this.on_second_interval);
+      delete this.on_second_interval;
+    }
 
     Howler.stop();
-    Matter.Render.stop(render);
-    Matter.Events.off(engine);
-    Matter.Engine.clear(engine);
+    Matter.Render.stop(this.m_render);
+    Matter.Events.off(this.engine);
+    delete this.engine;
   }
 
   calcBonusPerSecond() {
@@ -275,7 +274,7 @@ export class Game extends React.Component {
     <div style={{transform: `scale(${this.state.transform_scale})`}} onClick={() => this.onStart() }>
       <Overlay>
         <Score>{this.state.score.toLocaleString()}</Score>
-        <div><small>Bonus/Second:</small> {this.calcBonusPerSecond()}</div>
+        <div><small>Bonus/Second:</small> {this.calcBonusPerSecond()} ({this.state.bonus_delay})</div>
         <div><small>Clicks:</small> {this.state.total_clicks.toLocaleString()}</div>
       </Overlay>
       <div ref={el => this.el = el} />
