@@ -11,7 +11,7 @@ const {Engine, Render, World, Bodies} = Matter;
 const SAVED_STATS = ['score', 'total_clicks'];
 
 const BONUS = {
-  inc: 50,
+  inc: 100,
   decay: 0.5
 }
 
@@ -167,14 +167,17 @@ export class Game extends React.Component {
         if (goal) {
           goal.onCollision(this, pair.bodyB); 
         }
-        
-        let volume = Math.pow(pair.bodyB.speed, 3) / PING_VOLUME_CLIP;
-        volume = volume > 1 ? 1 : volume;
-        if (volume > 0.01) {
-          const sound = Matter.Common.choose(this.pings);
-          //const sound = new Howl({src, volume: (volume > 1 ? 1 : volume)});
-          sound.volume(volume, sound.play())
+
+        if (this.pings) {
+          let volume = Math.pow(pair.bodyB.speed, 3) / PING_VOLUME_CLIP;
+          volume = volume > 1 ? 1 : volume;
+          if (volume > 0.01) {
+            const sound = Matter.Common.choose(this.pings);
+            //const sound = new Howl({src, volume: (volume > 1 ? 1 : volume)});
+            sound.volume(volume, sound.play())
+          }
         }
+
         if (pair.bodyA === bottom) {
           map.onBottom.bind(this)(pair.bodyB);
           Matter.Composite.remove(engine.world, pair.bodyB);
