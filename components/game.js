@@ -6,11 +6,19 @@ import styled from 'styled-components';
 
 import {ragdoll} from '../components/ragdoll.js'
 
-const Score = styled.div`
-  font-size: 1.5em;
+const SAVED_STATS = ['score', 'total_clicks'];
+
+const Overlay = styled.section`
   text-shadow: 2px 2px 10px #000;
-  color: white;
-  text-align: center;
+  position: absolute;
+  width: 100%;
+  z-index: 10;
+  text-align: right;
+  padding: 0.5em;
+`
+
+const Score = styled.span`
+  font-size: 1.5em;
 `;
 
 export class Game extends React.Component {
@@ -22,13 +30,30 @@ export class Game extends React.Component {
       render: null,
       score: 0,
       bonus_per_second: 1,
+      bonus_delay: 1000,
+      bonus_delay_inc: 50,
+      bonus_delay_decay: 0.5,
       total_clicks: 0,
       generating: false,
-      bonus_size: 10,
+      bonus_size: 8,
+      cheat: false,
     };
   }
 
   componentDidMount() {
+
+    this.setupMatter();
+
+    const url = window.location.href
+    if (url.indexOf('cheat') > -1) {
+      this.setState({cheat: true});
+    }
+  }
+
+  setupMatter() {
+    if (this.state.engine) {
+      return;
+    }
     var Engine = Matter.Engine,
         Render = Matter.Render,
         World = Matter.World,
@@ -41,6 +66,18 @@ export class Game extends React.Component {
     let {height} = this.props;
     let width = height * 0.6; // 800 x 480
     let thickness = 100;
+
+    const {innerWidth, innerHeight} = window;
+
+    let heightRatio = innerHeight / height,
+        widthRatio = innerWidth / width,
+        pixelRatio = 1;
+    if (heightRatio <= widthRatio && heightRatio < 1) {
+      pixelRatio = heightRatio;
+    }
+    if (widthRatio <= heightRatio && widthRatio < 1) {
+      pixelRatio = widthRatio;
+    }
 
     // create a renderer
     var render = Render.create({
@@ -92,10 +129,13 @@ export class Game extends React.Component {
 
     Matter.Events.on(mouseConstraint, 'mouseup', (event) => {
       map.onMouseUp.bind(this)(event.mouse.position);
-      this.setState({
-        total_clicks: this.state.total_clicks + 1,
-        bonus_per_second: this.state.bonus_per_second + 1,
-      });
+      this.state.bonus_delay - this.state.bonus_delay_inc
+      let {total_clicks, bonus_delay, bonus_delay_inc} = this.state;
+      total_clicks = total_clicks + 1;
+      bonus_delay = bonus_delay - bonus_delay_inc;
+      if (bonus_delay < 1)
+        bonus_delay = 1;
+      this.setState({total_clicks, bonus_delay})
     });
     World.add(engine.world, mouseConstraint);
     render.mouse = mouse;
@@ -105,6 +145,14 @@ export class Game extends React.Component {
 
     // an example of using collisionStart event on an engine
     const PING_VOLUME_CLIP = Math.pow(8, 4);
+
+    const goalIdx = {};
+    for (const goal of Object.values(map.goals)) {
+      for (const body of goal.bodies) {
+        goalIdx[body.id] = goal;
+      }
+    }
+
     Matter.Events.on(engine, 'collisionStart', (event) => {
       var pairs = event.pairs;
       for (const pair of pairs) {
@@ -112,18 +160,11 @@ export class Game extends React.Component {
           map.onPeg.bind(this)(pair.bodyA, pair.bodyB);
         }
 
-        if (pair.bodyA.isSensor || pair.bodyB.isSensor) {
-          for (const key of Object.keys(map.goals)) {
-            const goal = map.goals[key];
-            if (goal.body === pair.bodyA) {
-              goal.onCollision(this, pair.bodyB); 
-            }
-            if (goal.body === pair.bodyB) {
-              goal.onCollision(this, pair.bodyA); 
-            }
-          }
+        let goal = pair.bodyA.isSensor && goalIdx[pair.bodyA.id];
+        if (goal) {
+          goal.onCollision(this, pair.bodyB); 
         }
-
+        
         let volume = Math.pow(pair.bodyB.speed, 3) / PING_VOLUME_CLIP;
         volume = volume > 1 ? 1 : volume;
         if (volume > 0.01) {
@@ -143,8 +184,21 @@ export class Game extends React.Component {
     Render.run(render);
     Engine.run(engine);
 
-    let score = parseInt(window.localStorage.getItem('score') || '0');
-    this.setState({render, engine, score})
+    this.loadSavedState();
+    this.setState({render, engine})
+  }
+
+  loadSavedState() {
+    for (const key of SAVED_STATS) {
+      let value = parseInt(localStorage.getItem(key) || '0');
+      this.setState({[key]: value});
+    }
+  }
+
+  saveSavesState() {
+    for (const key of SAVED_STATS) {
+      localStorage.setItem(key, this.state[key]);
+    }
   }
 
   onStart() {
@@ -154,15 +208,11 @@ export class Game extends React.Component {
     }
     this.setState({generating: true});
 
-    let off_center = 24;
-    let balls = 0;
-    let {width} = this.state.render.options;
-
     let bonus_generator = () => {
       if (!document.hidden) {
         map.onBonus(this);
       }
-      window.setTimeout(bonus_generator, parseInt(1000 / this.state.bonus_per_second) );
+      window.setTimeout(bonus_generator, this.state.bonus_delay );
     };
     bonus_generator();
 
@@ -174,20 +224,15 @@ export class Game extends React.Component {
   }
 
   onSecond() {
-    this.saveScore();
+    this.saveSavesState();
 
-    let {bonus_per_second} = this.state;
+    let {bonus_delay, bonus_delay_decay} = this.state;
 
-    bonus_per_second = bonus_per_second - 1;
-    if (bonus_per_second < 1) {
-      bonus_per_second = 1;
-    }
-    this.setState({bonus_per_second});
+    bonus_delay = bonus_delay + (bonus_delay * bonus_delay_decay);
+    if (bonus_delay > 1000)
+      bonus_delay = 1000;
+    this.setState({bonus_delay});
     window.setTimeout(() => this.onSecond(), 1000);
-  }
-
-  saveScore() {
-    localStorage.setItem('score', this.state.score);
   }
 
   buildMap(world, {layout, x_increment, y_increment}) {
@@ -216,11 +261,20 @@ export class Game extends React.Component {
     Matter.Engine.clear(engine);
   }
 
+  calcBonusPerSecond() {
+    return (1000/this.state.bonus_delay).toFixed(1);
+  }
+
   render() {
     return (
     <div onClick={() => this.onStart() }>
-      <div><small>Bonus per Second (Click to increase!):</small> {this.state.bonus_per_second} ({parseInt(1000 / this.state.bonus_per_second)} ms)</div>
-      <div><small>Clicks:</small> {this.state.total_clicks}</div>
+      <Overlay>
+        <Score>{this.state.score.toLocaleString()}</Score>
+        <div><small>Bonus/Second:</small> {this.calcBonusPerSecond()}</div>
+        <div><small>Clicks:</small> {this.state.total_clicks.toLocaleString()}</div>
+      </Overlay>
+      <div ref={el => this.el = el} />
+      { this.state.cheat &&
         <div><small>Bonus Size:</small>
           <input
             type="number" 
@@ -229,9 +283,11 @@ export class Game extends React.Component {
             value={this.state.bonus_size}
             onChange={(e) => this.setState({bonus_size: e.target.value})}
           />
-          </div>
-      <Score>{this.state.score.toLocaleString()}</Score> 
-      <div ref={el => this.el = el} />
+        </div>
+      }
+      <style jsx>{`
+        position: relative;
+      `}</style>
     </div>
     );
   }

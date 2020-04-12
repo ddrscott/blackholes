@@ -46,8 +46,13 @@ export default class MyDocument extends Document {
             font-family: "Lucida Console", Monaco, monospace;
             width: 100%;
             height: 100%;
+            margin: 0;
+            padding: 0;
             background: #33404a;
             color: #eee;
+          }
+          small {
+            font-size: .6em;
           }
         `}</style>
       </html>
