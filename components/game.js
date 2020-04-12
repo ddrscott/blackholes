@@ -39,6 +39,7 @@ export class Game extends React.Component {
       generating: false,
       bonus_size: 8,
       cheat: false,
+      transform_scale: 1,
     };
   }
 
@@ -73,12 +74,15 @@ export class Game extends React.Component {
 
     let heightRatio = innerHeight / height,
         widthRatio = innerWidth / width,
-        pixelRatio = 1;
+        transform_scale = 1;
     if (heightRatio <= widthRatio && heightRatio < 1) {
-      pixelRatio = heightRatio;
+      transform_scale = heightRatio;
     }
     if (widthRatio <= heightRatio && widthRatio < 1) {
-      pixelRatio = widthRatio;
+      transform_scale = widthRatio;
+    }
+    if (transform_scale < 1) {
+      this.setState({transform_scale});
     }
 
     // create a renderer
@@ -218,7 +222,7 @@ export class Game extends React.Component {
     };
     bonus_generator();
 
-    this.onSecond();
+    setInterval(() => this.onSecond(), 1000);
   }
 
   addBody(body) {
@@ -234,7 +238,6 @@ export class Game extends React.Component {
     if (bonus_delay > 1000)
       bonus_delay = 1000;
     this.setState({bonus_delay});
-    window.setTimeout(() => this.onSecond(), 1000);
   }
 
   buildMap(world, {layout, x_increment, y_increment}) {
@@ -269,7 +272,7 @@ export class Game extends React.Component {
 
   render() {
     return (
-    <div onClick={() => this.onStart() }>
+    <div style={{transform: `scale(${this.state.transform_scale})`}} onClick={() => this.onStart() }>
       <Overlay>
         <Score>{this.state.score.toLocaleString()}</Score>
         <div><small>Bonus/Second:</small> {this.calcBonusPerSecond()}</div>
@@ -289,6 +292,7 @@ export class Game extends React.Component {
       }
       <style jsx>{`
         position: relative;
+        transform-origin: top;
       `}</style>
     </div>
     );
