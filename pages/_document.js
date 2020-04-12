@@ -43,6 +43,7 @@ export default class MyDocument extends Document {
 
             gtag('config', 'UA-50126719-6');
           `}} />
+          <script data-ad-client="ca-pub-8547687546592989" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
         </Head>
         <body>
           <Main />
