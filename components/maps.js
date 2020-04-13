@@ -1,13 +1,23 @@
 import Matter from 'matter-js'
 import {ragdoll} from '../components/ragdoll.js'
 
-const {circle, rectangle} = Matter.Bodies;
+const {circle, rectangle, polygon} = Matter.Bodies;
 const {random} = Matter.Common;
+const constraint = Matter.Constraint.create;
 
 const staticProps = {
   isStatic: true,
   render: {fillStyle: '#8F671F'}
 }
+
+const CONSTRAINED_PROPS = {
+  density:  1,
+  friction: 0.001,
+  frictionAir: 0.01,
+  frictionStatic: 0,
+  render: {fillStyle: '#8F671F'}
+}
+
 
 const DEFAULT_PUCK_BODY = {
   restitution: 0.4,
@@ -78,26 +88,26 @@ export const config = {
   },
   background: "url('/bamboo-bg.jpg') center center",
   layout: `
-            |     |
-            |     |
-            O     O
-
+|           |     |           |
+|           |     |           |
+|           O     O           |
+|                             |
 O     O     O     O     O     O
-
-   O     O     O     O     O
-
+|                             |
+|  O     O     ^     O     O  |
+|                             |
+O     O     ^     ^     O     O
+|                             |
+|  O     ^     ^     ^     O  |
+|                             |
 O     O     O     O     O     O
-
-   O     O     O     O     O
-                            
+|                             |
+|  O     O     O     O     O  |
+|                             |
 O     O     O     O     O     O
-
-   O     O     O     O     O
-
-O     O     O     O     O     O
-
-   O     O     O     O     O
-                            
+|                             |
+|  O     O     O     O     O  |
+|                             |
 O     O     O     O     O     O
 |                             |
 |  O     O     O     O     O  |
@@ -115,9 +125,17 @@ O     O     O     O     O     O
     'O': (x,y) => circle(x, y, x_increment/2 + (random() / 10 ), staticProps),
     '|': (x,y) => rectangle(x, y, x_increment/2, y_increment+1, staticProps),
     'i': (x,y) => [
-          circle(x, y - y_increment / 4, 4, staticProps),
-          rectangle(x, y + y_increment * 0.3, 8, 12.5, staticProps)
-         ],
+                    circle(x, y - y_increment / 4, 4, staticProps),
+                    rectangle(x, y + y_increment * 0.3, 8, 12.5, staticProps)
+                  ],
+    '^': (x,y) => {
+       let poly = polygon(x, y, 3, x_increment + random(), {
+         angle: 35.08,
+         ...CONSTRAINED_PROPS
+       });
+       return [poly, constraint({ pointA: {x, y}, bodyB: poly, length: 0 })];
+    }
+    ,
     'A': (x,y) => GOALS['A'].createBody(x,y),
     'B': (x,y) => GOALS['B'].createBody(x,y),
     'C': (x,y) => GOALS['C'].createBody(x,y),

@@ -12,7 +12,7 @@ const SAVED_STATS = ['score', 'total_clicks'];
 
 const BONUS = {
   inc: 100,
-  decay: 0.5
+  decay: 0.25
 }
 
 const Overlay = styled.section`
@@ -38,8 +38,9 @@ export class Game extends React.Component {
     super(props);
     this.state = {
       score: 0,
-      bonus_delay: 1000,
+      bonus_delay: 500,
       total_clicks: 0,
+      clicks_per_second: 0,
       bonus_size: 8,
       cheat: false,
       transform_scale: 1,
@@ -69,7 +70,7 @@ export class Game extends React.Component {
     // 800 x 480 Out[3]: 1.7777777777777777
     let {height} = this.props;
     let width = height * 0.6; // 800 x 480
-    let thickness = 100;
+    let thickness = 1000;
 
     const {innerWidth, innerHeight} = window;
 
@@ -169,11 +170,11 @@ export class Game extends React.Component {
         }
 
         if (this.pings) {
-          let volume = Math.pow(pair.bodyB.speed, 3) / PING_VOLUME_CLIP;
+          let volume = Math.sqrt(pair.collision.depth) / 100;
           volume = volume > 1 ? 1 : volume;
-          if (volume > 0.01) {
+
+          if (volume > 0.001) {
             const sound = Matter.Common.choose(this.pings);
-            //const sound = new Howl({src, volume: (volume > 1 ? 1 : volume)});
             sound.volume(volume, sound.play())
           }
         }
@@ -277,7 +278,7 @@ export class Game extends React.Component {
     <div style={{transform: `scale(${this.state.transform_scale})`}} onClick={() => this.onStart() }>
       <Overlay>
         <Score>{this.state.score.toLocaleString()}</Score>
-        <div><small>Bonus/Second:</small> {this.calcBonusPerSecond()} ({this.state.bonus_delay})</div>
+        <div><small>Bonus/Second:</small> {this.calcBonusPerSecond()}</div>
         <div><small>Clicks:</small> {this.state.total_clicks.toLocaleString()}</div>
       </Overlay>
       <div ref={el => this.el = el} />
