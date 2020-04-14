@@ -2,6 +2,9 @@ import styled from 'styled-components';
 import Link from 'next/link'
 import Measure from 'react-measure'
 import {Game} from '../components/game';
+import '../maps/001_basic';
+import '../maps/002_basic';
+import maps from '../maps/index';
 
 const AsideStart = styled.aside`
 `;
@@ -20,7 +23,7 @@ function App({query}) {
     <Main>
       <AsideStart>
       </AsideStart>
-      <Game height={800} style={{border: '1px solid black'}} />
+      <Game map={maps[0]} height={800} />
       <AsideEnd>
       </AsideEnd>
     </Main>

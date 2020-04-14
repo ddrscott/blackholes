@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import Matter from 'matter-js';
-import {config as map} from '../components/maps.js';
 import {Howl, Howler} from 'howler';
 import styled from 'styled-components';
 
@@ -28,9 +27,38 @@ const Overlay = styled.section`
   pointer-events: none;
 `
 
+const Underlay = styled.section`
+  position: absolute;
+  top: 0; left: 0; bottom: 0; right: 0;
+  padding: 0.25em;
+  user-select: none;
+  pointer-events: none;
+  height: 800px; /* FIXME we shouldn't need this! */
+`
+
 const Score = styled.span`
   font-size: 1.5em;
 `;
+
+const Title = styled.h1`
+  color: #B78E49;
+  font-weight: bold;
+  margin: 0;
+  padding: 0 .5em;
+  margin-top: .5em;
+  transform: rotate(2deg);
+  opacity: 0.75;
+`
+const MapName = styled.div`
+  -webkit-text-stroke: 1px #B78E49;
+  font-size: 1.5em;
+  padding: 0;
+  margin-top: -2em;
+  margin-left: 1em;
+  text-align: left;
+  transform: rotate(-15deg);
+  opacity: 0.75;
+`
 
 export class Game extends React.Component {
 
@@ -58,6 +86,8 @@ export class Game extends React.Component {
   }
 
   setupMatter() {
+    const {map} = this.props;
+
     if (this.engine) {
       Matter.Engine.clear(this.engine);
     }
@@ -92,7 +122,7 @@ export class Game extends React.Component {
         element: this.el,
         engine: engine,
         options: {
-          background: map.background,
+          background: "transparent",
           width: width,
           height: height,
           //showAngleIndicator: true,
@@ -208,6 +238,8 @@ export class Game extends React.Component {
   }
 
   onStart() {
+    const {map} = this.props;
+
     if (this.on_second_interval) {
       return;
     }
@@ -241,6 +273,7 @@ export class Game extends React.Component {
   }
 
   buildMap(world, {layout, x_increment, y_increment}) {
+    const {map} = this.props;
     let y = 0;
     let lines = layout.split("\n");
     lines.splice(0,1);
@@ -274,30 +307,36 @@ export class Game extends React.Component {
   }
 
   render() {
+    const {map} = this.props;
+
     return (
-    <div style={{transform: `scale(${this.state.transform_scale})`}} onClick={() => this.onStart() }>
-      <Overlay>
-        <Score>{this.state.score.toLocaleString()}</Score>
-        <div><small>Bonus/Second:</small> {this.calcBonusPerSecond()}</div>
-        <div><small>Clicks:</small> {this.state.total_clicks.toLocaleString()}</div>
-      </Overlay>
-      <div ref={el => this.el = el} />
-      { this.state.cheat &&
-        <div><small>Bonus Size:</small>
-          <input
-            type="number" 
-            min="1"
-            max="100"
-            value={this.state.bonus_size}
-            onChange={(e) => this.setState({bonus_size: e.target.value})}
-          />
-        </div>
-      }
-      <style jsx>{`
-        position: relative;
-        transform-origin: top;
-      `}</style>
-    </div>
+      <div style={{transform: `scale(${this.state.transform_scale})`}} onClick={() => this.onStart() }>
+        <Overlay>
+          <Score>{this.state.score.toLocaleString()}</Score>
+          <div><small>Bonus/Second:</small> {this.calcBonusPerSecond()}</div>
+          <div><small>Clicks:</small> {this.state.total_clicks.toLocaleString()}</div>
+        </Overlay>
+          <div ref={el => this.el = el} style={{'z-index': '1'}}/>
+        { this.state.cheat &&
+          <div><small>Bonus Size:</small>
+            <input
+              type="number" 
+              min="1"
+              max="100"
+              value={this.state.bonus_size}
+              onChange={(e) => this.setState({bonus_size: e.target.value})}
+            />
+          </div>
+        }
+        <Underlay style={{background: map.background}}>
+          <Title>Droppings</Title>
+          <MapName>{map.name}</MapName>
+        </Underlay>
+        <style jsx>{`
+          position: relative;
+          transform-origin: top;
+        `}</style>
+      </div>
     );
   }
 }

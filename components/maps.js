@@ -11,8 +11,9 @@ const staticProps = {
 }
 
 const CONSTRAINED_PROPS = {
-  density:  1,
-  friction: 0.001,
+  restitution: 0.9,
+  density:  0.5,
+  friction: 0.01,
   frictionAir: 0.01,
   frictionStatic: 0,
   render: {fillStyle: '#8F671F'}
@@ -86,43 +87,11 @@ export const config = {
     //diameter: 18,
     body: DEFAULT_PUCK_BODY,
   },
-  background: "url('/bamboo-bg.jpg') center center",
-  layout: `
-|           |     |           |
-|           |     |           |
-|           O     O           |
-|                             |
-O     O     O     O     O     O
-|                             |
-|  O     O     ^     O     O  |
-|                             |
-O     O     ^     ^     O     O
-|                             |
-|  O     ^     ^     ^     O  |
-|                             |
-O     O     O     O     O     O
-|                             |
-|  O     O     O     O     O  |
-|                             |
-O     O     O     O     O     O
-|                             |
-|  O     O     O     O     O  |
-|                             |
-O     O     O     O     O     O
-|                             |
-|  O     O     O     O     O  |
-|  |                       |  |
-|  |  O     O     O     O  |  |
-|  |  |                 |  |  |
-|  |  |  O     O     O  |  |  |
-|  |  |  |           |  |  |  |
-|  |  |  |  O     O  |  |  |  |
-|  |  |  |  |     |  |  |  |  |
-|  |  |  |  |  O  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |
-|A |B |C |D |E |E |D |C |B |A |`,
+  background: "transparent",
+  layout: '',
   statics: {
-    'O': (x,y) => circle(x, y, x_increment/2 + (random() / 10 ), staticProps),
+    'o': (x,y) => circle(x, y, x_increment/2 + (random() / 10 ), staticProps),
+    'O': (x,y) => circle(x, y, x_increment * 0.8 + (random() / 10 ), staticProps),
     '|': (x,y) => rectangle(x, y, x_increment/2, y_increment+1, staticProps),
     'i': (x,y) => [
                     circle(x, y - y_increment / 4, 4, staticProps),
@@ -157,7 +126,7 @@ O     O     O     O     O     O
     const {m_render} = game;
     const {bonus_size} = game.state,
           {width} = m_render.options,
-          off_center = x_increment*2,
+          off_center = x_increment*5,
           ball_x = width / 2 + random(off_center) - (off_center / 2);
     game.addBody(circle(ball_x, 0 - 50, bonus_size, DEFAULT_PUCK_BODY));
   },
