@@ -4,39 +4,39 @@ import maps from '../maps';
 maps.push({
   ...config,
   background: "url('/bamboo-bg.jpg') center center",
-  name: "Such Simple",
+  name: "Biggie Size",
   layout: `
 |           |     |           |
 |           |     |           |
-|           o     o           |
+|           O     O           |
 |                             |
-|     o     o     o     o     |
+|     O     O     O     O     |
+|                             |
+|  O     O     O     O     O  |
+|                             |
+|     O     O     O     O     |
+|                             |
+|  O     O     O     O     O  |
+|                             |
+|     O     O     O     O     |
+|                             |
+|  O     O     O     O     O  |
+|                             |
+|     O     O     O     O     |
+|                             |
+|  O     O     O     O     O  |
+|                             |
+|     O     O     O     O     |
+|                             |
+|  O     O     O     O     O  |
+|                             |
+|     O     O     O     O     |
+|                             |
+|  O     O     O     O     O  |
+|                             |
+|     O     O     O     O     |
 |                             |
 |  o     o     o     o     o  |
-|                             |
-|     o     o     o     o     |
-|                             |
-|  o     o     o     o     o  |
-|                             |
-|     o     o     o     o     |
-|                             |
-|  o     o     o     o     o  |
-|                             |
-|     o     o     o     o     |
-|                             |
-|  o     o     o     o     o  |
-|                             |
-|     o     o     o     o     |
-|                             |
-|  o     o     o     o     o  |
-|                             |
-|     o     o     o     o     |
-|                             |
-|  o     o     o     o     o  |
-|                             |
-|     o     o     o     o     |
-|                             |
-|  o     o     o     o     o  |
-|  |  |  |  |  |  |  |  |  |  |
-|A |B |C |D |E |E |D |C |B |A |`,
+|A |B |C |D |E |E |D |C |B |A |
+|  |  |  |  |  |  |  |  |  |  |`
 });

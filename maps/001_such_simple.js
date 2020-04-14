@@ -8,35 +8,35 @@ maps.push({
   layout: `
 |           |     |           |
 |           |     |           |
-|           O     O           |
+|           o     o           |
 |                             |
-O                             O
+|     o     o     o     o     |
 |                             |
+|  o     o     o     o     o  |
 |                             |
+|     o     o     o     o     |
 |                             |
-O                             O
+|  o     o     o     o     o  |
 |                             |
+|     o     o     o     o     |
 |                             |
+|  o     o     o     o     o  |
 |                             |
-O                             O
+|     o     o     o     o     |
 |                             |
+|  o     o     o     o     o  |
 |                             |
+|     o     o     o     o     |
 |                             |
-O                             O
+|  o     o     o     o     o  |
 |                             |
-|  O     O     O     O     O  |
+|     o     o     o     o     |
 |                             |
-O     O     O     O     O     O
+|  o     o     o     o     o  |
 |                             |
-|  O     O     O     O     O  |
-|  |                       |  |
-|  |  O     O     O     O  |  |
-|  |  |                 |  |  |
-|  |  |  O     O     O  |  |  |
-|  |  |  |           |  |  |  |
-|  |  |  |  O     O  |  |  |  |
-|  |  |  |  |     |  |  |  |  |
-|  |  |  |  |  O  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |
-|A |B |C |D |E |E |D |C |B |A |`,
+|     o     o     o     o     |
+|                             |
+|  o     o     o     o     o  |
+|A |B |C |D |E |E |D |C |B |A |
+|  |  |  |  |  |  |  |  |  |  |`
 });

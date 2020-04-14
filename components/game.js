@@ -22,7 +22,7 @@ const Overlay = styled.section`
   right: 0;
   z-index: 10;
   text-align: right;
-  padding: 0.25em;
+  padding: 0.25em .5em;
   user-select: none;
   pointer-events: none;
 `
@@ -45,19 +45,27 @@ const Title = styled.h1`
   font-weight: bold;
   margin: 0;
   padding: 0 .5em;
-  margin-top: .5em;
-  transform: rotate(2deg);
   opacity: 0.75;
 `
 const MapName = styled.div`
-  -webkit-text-stroke: 1px #B78E49;
+  ----webkit-text-stroke: 1px #B78E49;
   font-size: 1.5em;
+  font-family: sans-serif;
+  font-weight: 900;
   padding: 0;
-  margin-top: -2em;
-  margin-left: 1em;
+  margin-left: .25em;
+  margin-top: -2.2em;
   text-align: left;
   transform: rotate(-15deg);
   opacity: 0.75;
+  color: #511;
+`
+
+const MapSup = styled.sup`
+  -webkit-text-stroke: 0;
+  font-size: .5em;
+  margin-bottom: -.5em;
+  display: block;
 `
 
 export class Game extends React.Component {
@@ -76,25 +84,32 @@ export class Game extends React.Component {
   }
 
   componentDidMount() {
-
     this.setupMatter();
-
     const url = window.location.href
     if (url.indexOf('cheat') > -1) {
       this.setState({cheat: true});
     }
   }
 
+  componentDidUpdate({map}) {
+    if (map != this.props.map) {
+      console.log('setup for new map: ', this.props.map.name);
+      this.setupMatter();
+    }
+  }
+
+
   setupMatter() {
     const {map} = this.props;
 
+    var {engine} = this;
     if (this.engine) {
+      Matter.Events.off(this.engine);
       Matter.Engine.clear(this.engine);
     }
-
-    // create an engine
-    var engine = Engine.create(); 
+    engine = Engine.create(); 
     this.engine = engine;
+    Engine.run(this.engine);
 
     // react-measure
     // 800 x 480 Out[3]: 1.7777777777777777
@@ -114,38 +129,44 @@ export class Game extends React.Component {
       transform_scale = widthRatio;
     }
     if (transform_scale < 1) {
-      this.setState({transform_scale});
+      // this.setState({transform_scale});
     }
 
-    // create a renderer
-    var render = Render.create({
-        element: this.el,
-        engine: engine,
-        options: {
-          background: "transparent",
-          width: width,
-          height: height,
-          //showAngleIndicator: true,
-          // showCollisions: true,
-          // showVelocity: true,
-          wireframes: false,
-          // showVelocity: true,
-          // showCollisions: true,
-          // showSeparations: true,
-          // showAxes: true,
-          // showPositions: true,
-          // showAngleIndicator: true,
-          // showIds: true,
-          // showShadows: true,
-          // showVertexNumbers: true,
-          // showConvexHulls: true,
-          // showInternalEdges: true,
-          // showMousePosition: true,
-        }
-    });
-    this.m_render = render;
+    let render = this.m_render;
+    if (render === undefined) {
+      // create a renderer
+      render = Render.create({
+          element: this.el,
+          engine: engine,
+          options: {
+            background: "transparent",
+            width: width,
+            height: height,
+            //showAngleIndicator: true,
+            // showCollisions: true,
+            // showVelocity: true,
+            wireframes: false,
+            // showVelocity: true,
+            // showCollisions: true,
+            // showSeparations: true,
+            // showAxes: true,
+            // showPositions: true,
+            // showAngleIndicator: true,
+            // showIds: true,
+            // showShadows: true,
+            // showVertexNumbers: true,
+            // showConvexHulls: true,
+            // showInternalEdges: true,
+            // showMousePosition: true,
+          }
+      });
+      this.m_render = render;
 
-    var top =    Bodies.rectangle(width / 2, thickness / -2 + 1,      width, thickness, { isStatic: true });
+      Render.run(this.m_render);
+    }
+    this.m_render.engine = this.engine;
+
+    // var top =    Bodies.rectangle(width / 2, thickness / -2 + 1,      width, thickness, { isStatic: true });
     var bottom = Bodies.rectangle(width / 2, height + (map.y_increment * 2) + (thickness * 0.5), width, thickness, { isStatic: true });
     var left =   Bodies.rectangle( thickness / -2, height / 2,      thickness, height, { isStatic: true });
     var right =  Bodies.rectangle( width + thickness / 2, height / 2 - 1,  thickness, height, { isStatic: true });
@@ -170,12 +191,13 @@ export class Game extends React.Component {
       let {total_clicks, bonus_delay} = this.state;
       total_clicks = total_clicks + 1;
       bonus_delay = bonus_delay - BONUS.inc;
-      if (bonus_delay < 1)
-        bonus_delay = 1;
+      if (bonus_delay < 20)
+        bonus_delay = 20;
       this.setState({total_clicks, bonus_delay})
     });
+
     World.add(engine.world, mouseConstraint);
-    render.mouse = mouse;
+    //? render.mouse = mouse;
 
     // an example of using collisionStart event on an engine
     const PING_VOLUME_CLIP = Math.pow(8, 4);
@@ -215,11 +237,6 @@ export class Game extends React.Component {
         }
       }
     });
-
-
-    // start evertying
-    Render.run(this.m_render);
-    Engine.run(this.engine);
 
     this.loadSavedState();
   }
@@ -316,7 +333,7 @@ export class Game extends React.Component {
           <div><small>Bonus/Second:</small> {this.calcBonusPerSecond()}</div>
           <div><small>Clicks:</small> {this.state.total_clicks.toLocaleString()}</div>
         </Overlay>
-          <div ref={el => this.el = el} style={{'z-index': '1'}}/>
+          <div ref={el => this.el = el} style={{'zIndex': 1}}/>
         { this.state.cheat &&
           <div><small>Bonus Size:</small>
             <input
@@ -330,7 +347,7 @@ export class Game extends React.Component {
         }
         <Underlay style={{background: map.background}}>
           <Title>Droppings</Title>
-          <MapName>{map.name}</MapName>
+            <MapName><MapSup>map</MapSup>{map.name}</MapName>
         </Underlay>
         <style jsx>{`
           position: relative;

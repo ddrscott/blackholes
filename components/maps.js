@@ -22,23 +22,14 @@ const CONSTRAINED_PROPS = {
 
 const DEFAULT_PUCK_BODY = {
   restitution: 0.4,
-  density:  0.9,
-  friction: 0.001,
+  density:  1,
+  friction: 0.25,
   frictionAir: 0,
-  frictionStatic: 0,
+  frictionStatic: 0.25,
   render: {
     lineWidth: 3,
     strokeStyle: '#6F471F',
   }
-}
-
-const SLOT_POINTS_MULT = {
-  1: 1,
-  4: 5,
-  7: 25,
-  10: 100,
-  13: 1000,
-  14: 1000
 }
 
 const x_increment = 16,
@@ -57,7 +48,7 @@ class Goal {
       render: {
         fillStyle: 'transparent',
         strokeStyle: '#999',
-        lineWidth: 4,
+        lineWidth: 3,
       }
     });
     this.bodies.push(body);
@@ -90,15 +81,15 @@ export const config = {
   background: "transparent",
   layout: '',
   statics: {
-    'o': (x,y) => circle(x, y, x_increment/2 + (random() / 10 ), staticProps),
-    'O': (x,y) => circle(x, y, x_increment * 0.8 + (random() / 10 ), staticProps),
+    'o': (x,y) => circle(x, y, x_increment/2 - (random() / 10 ), staticProps),
+    'O': (x,y) => circle(x, y, x_increment * 0.8 - (random() / 10 ), staticProps),
     '|': (x,y) => rectangle(x, y, x_increment/2, y_increment+1, staticProps),
     'i': (x,y) => [
                     circle(x, y - y_increment / 4, 4, staticProps),
                     rectangle(x, y + y_increment * 0.3, 8, 12.5, staticProps)
                   ],
     '^': (x,y) => {
-       let poly = polygon(x, y, 3, x_increment + random(), {
+       let poly = polygon(x, y, 3, x_increment - random(), {
          angle: 35.08,
          ...CONSTRAINED_PROPS
        });
@@ -138,6 +129,6 @@ export const config = {
     var diameter = 16;
     const {m_render} = game;
     const {width} = m_render.options;
-    game.addBody(circle(x, -diameter, diameter + random(), DEFAULT_PUCK_BODY));
+    game.addBody(circle(x, -diameter, diameter - random(), DEFAULT_PUCK_BODY));
   }
 }
