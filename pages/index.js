@@ -3,11 +3,7 @@ import styled from 'styled-components';
 import Link from 'next/link'
 import Measure from 'react-measure'
 import {Game} from '../components/game';
-import '../maps/001_such_simple';
-import '../maps/002_bigger';
-import '../maps/002_wedgy';
-import '../maps/003_try_angles';
-import '../maps/004_smiley';
+import '../maps/register';
 import maps from '../maps';
 
 const Aside = styled.aside`

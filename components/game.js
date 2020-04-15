@@ -4,8 +4,9 @@ import {Howl, Howler} from 'howler';
 import styled from 'styled-components';
 
 import {ragdoll} from '../components/ragdoll.js'
+import Render from '../components/CustomRender'
 
-const {Engine, Render, World, Bodies} = Matter;
+const {Engine, World, Bodies} = Matter;
 
 const SAVED_STATS = ['score', 'total_clicks'];
 

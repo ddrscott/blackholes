@@ -8,15 +8,15 @@
 
 var Render = {};
 
-module.exports = Render;
+import Matter from 'matter-js';
 
-var Common = require('../core/Common');
-var Composite = require('../body/Composite');
-var Bounds = require('../geometry/Bounds');
-var Events = require('../core/Events');
-var Grid = require('../collision/Grid');
-var Vector = require('../geometry/Vector');
-var Mouse = require('../core/Mouse');
+const {Common,
+Composite,
+Bounds,
+Events,
+Grid,
+Vector,
+Mouse} = Matter;
 
 (function() {
 
@@ -701,8 +701,15 @@ var Mouse = require('../core/Mouse');
                             c.strokeStyle = part.render.strokeStyle;
                             c.stroke();
                         }
-
                         c.fill();
+
+                        const {text} = part.render;
+                        if (text) {
+                          c.font = text.font || "12px Arial";
+                          c.fillStyle = text.fillStyle || 'rgba(255,255,255,0.85)';
+                          let size = c.measureText(text.fillText);
+                          c.fillText(text.fillText, part.position.x - size.width/2, part.position.y+5);
+                        }
                     } else {
                         c.lineWidth = 1;
                         c.strokeStyle = '#bbb';
@@ -1511,3 +1518,5 @@ var Mouse = require('../core/Mouse');
      */
 
 })();
+
+export default Render;

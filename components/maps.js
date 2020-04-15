@@ -49,6 +49,11 @@ class Goal {
         fillStyle: 'transparent',
         strokeStyle: '#999',
         lineWidth: 3,
+        text: {
+          font: '16px monospace',
+          fillStyle: '#333',
+          fillText: this.bonus + "x"
+        }
       }
     });
     this.bodies.push(body);

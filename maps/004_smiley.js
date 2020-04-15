@@ -24,11 +24,11 @@ O                             O
 |              ^              |
 |             ^ ^             |
 |            ^ o ^            |
-|                             |
+|            A  A             |
 |  o    o             o    o  |
 |  o     o           o     o  |
 |  o      o         o      o  |
-|   o        oAA o        o   |
+|   o       o     o       o   |
 |     o                 o     |
 |       o             o       |
 |         o o     o o         |
@@ -37,6 +37,6 @@ O                             O
 |  i                       i  |
 |  |  i  i  i  i  i  i  i  |  |
 |  |  |  |  |  |  |  |  |  |  |
-|E |B |C |D |  |  |D |C |B |E |
+|  |D |C |B |  |  |B |C |D |  |
 |  |  |  |  |  |  |  |  |  |  |`,
 });
