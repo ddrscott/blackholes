@@ -37,6 +37,6 @@ maps.push({
 |     O     O     O     O     |
 |                             |
 |  o     o     o     o     o  |
-|A |B |C |D |E |E |D |C |B |A |
+|  |B |C |D |E |E |D |C |B |  |
 |  |  |  |  |  |  |  |  |  |  |`
 });
