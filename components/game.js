@@ -187,6 +187,7 @@ export class Game extends React.Component {
         });
 
     Matter.Events.on(mouseConstraint, 'mouseup', (event) => {
+      this.onStart();
       map.onMouseUp(this, event.mouse.position);
       let {total_clicks, bonus_delay} = this.state;
       total_clicks = total_clicks + 1;
@@ -219,6 +220,11 @@ export class Game extends React.Component {
         let goal = pair.bodyA.isSensor && goalIdx[pair.bodyA.id];
         if (goal) {
           goal.onCollision(this, pair.bodyB); 
+          let rend = pair.bodyA.render;
+          if (rend.collisionFillStyle) {
+            rend.fillStyleRestore = rend.fillStyleRestore || rend.fillStyle;
+            rend.fillStyle = rend.collisionFillStyle;
+          }
         }
 
         if (this.pings) {
@@ -228,6 +234,23 @@ export class Game extends React.Component {
           if (volume > 0.001) {
             const sound = Matter.Common.choose(this.pings);
             sound.volume(volume, sound.play())
+          }
+        }
+      }
+    });
+
+    Matter.Events.on(engine, 'collisionEnd', (event) => {
+      var pairs = event.pairs;
+      for (const pair of pairs) {
+        if (pair.bodyA.isStatic || pair.bodyB.isStatic) {
+          map.onPeg.bind(this)(pair.bodyA, pair.bodyB);
+        }
+
+        let goal = pair.bodyA.isSensor && goalIdx[pair.bodyA.id];
+        if (goal) {
+          let rend = pair.bodyA.render;
+          if (rend.fillStyleRestore) {
+            rend.fillStyle = rend.fillStyleRestore;
           }
         }
 
@@ -327,7 +350,7 @@ export class Game extends React.Component {
     const {map} = this.props;
 
     return (
-      <div style={{transform: `scale(${this.state.transform_scale})`}} onClick={() => this.onStart() }>
+      <div style={{transform: `scale(${this.state.transform_scale})`}}>
         <Overlay>
           <Score>{this.state.score.toLocaleString()}</Score>
           <div><small>Bonus/Second:</small> {this.calcBonusPerSecond()}</div>

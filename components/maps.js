@@ -49,6 +49,7 @@ class Goal {
         fillStyle: 'transparent',
         strokeStyle: '#999',
         lineWidth: 3,
+        collisionFillStyle: '#383',
         text: {
           font: '16px monospace',
           fillStyle: '#333',

@@ -6,19 +6,21 @@
 * @class Render
 */
 
-var Render = {};
+const Render = {};
 
 import Matter from 'matter-js';
 
-const {Common,
-Composite,
-Bounds,
-Events,
-Grid,
-Vector,
-Mouse} = Matter;
-
 (function() {
+    const {
+      Common,
+      Composite,
+      Bounds,
+      Events,
+      Grid,
+      Vector,
+      Mouse
+    } = Matter;
+
 
     var _requestAnimationFrame,
         _cancelAnimationFrame;
