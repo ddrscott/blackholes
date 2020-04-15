@@ -111,12 +111,12 @@ export const config = {
   goals: GOALS,
   audio: {
     pings: [
-      '/audio/wood-01.flac',
-      '/audio/wood-02.flac',
-      '/audio/wood-03.flac',
-      '/audio/wood-04.flac',
-      '/audio/wood-05.flac',
-      '/audio/wood-06.flac',
+      '/audio/wood-01.mp3',
+      '/audio/wood-02.mp3',
+      '/audio/wood-03.mp3',
+      '/audio/wood-04.mp3',
+      '/audio/wood-05.mp3',
+      '/audio/wood-06.mp3',
     ]
   },
   onBonus(game) {
