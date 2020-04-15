@@ -93,7 +93,6 @@ export class Game extends React.Component {
 
   componentDidUpdate({map}) {
     if (map != this.props.map) {
-      console.log('setup for new map: ', this.props.map.name);
       this.setupMatter();
     }
   }

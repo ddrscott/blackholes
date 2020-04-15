@@ -21,27 +21,31 @@ const Main = styled.main`
   justify-content: center;
 `;
 
+function openMap(idx) {
+  window.location = '/?map=' + idx;
+}
+
 function App({query}) {
   const {map} = query;
 
-  const [mapIdx, setMap] = useState(maps[map] ? parseInt(map) : 0);
+  let [mapIdx, setMap] = useState(maps[map - 1] ? parseInt(map) : 1);
   return (
     <Main>
       <Aside>
       </Aside>
-      <Game map={maps[mapIdx]} height={800} />
+      <Game map={maps[mapIdx-1]} height={800} />
       <Aside>
         <div>
-        <small style={{whiteSpace: 'nowrap'}}>Map: {mapIdx + 1} of {maps.length}</small>
+        <small style={{whiteSpace: 'nowrap'}}>Map: {mapIdx} of {maps.length}</small>
         </div>
       {
-       mapIdx > 0
-       ? <button onClick={() => setMap(mapIdx - 1)}>&lt; Previous</button>
+       mapIdx > 1
+       ? <button onClick={() => openMap(mapIdx - 1)}>&lt; Previous</button>
        : <button disabled>&lt; Previous</button>
       }
       {
-       mapIdx < maps.length - 1
-       ? <button onClick={() => setMap(mapIdx + 1)}>Next &gt;</button>
+       mapIdx < maps.length
+       ? <button onClick={() => openMap(mapIdx + 1)}>Next &gt;</button>
        : <button disabled>Next &gt;</button>
       }
       </Aside>
@@ -50,7 +54,6 @@ function App({query}) {
 }
 
 App.getInitialProps = ({res, query}) => {
-  console.log(query);
   return {query}
 }
 
