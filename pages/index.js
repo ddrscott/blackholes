@@ -1,10 +1,17 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import Link from 'next/link'
-import Measure from 'react-measure'
-import {Game} from '../components/game';
-import '../maps/register';
+import dynamic from 'next/dynamic'
+
+import '../maps/001_such_simple';
+import '../maps/002_bigger';
+import '../maps/003_wedgy';
+import '../maps/004_smiley';
+import '../maps/005_try_angles';
+import '../maps/006_just_air';
 import maps from '../maps';
+
+const Game = dynamic(() => import('../components/game'), { ssr: false });
 
 const Aside = styled.aside`
   padding: .5em;
@@ -14,12 +21,20 @@ const Aside = styled.aside`
 const Main = styled.main`
   width: 100%;
   display: flex;
-  justify-content: center;
+  flex-direction: column-reverse;
+  text-align: center;
+
+  @media (min-width: 600px) {
+    flex-direction: row;
+    justify-content: center;
+    text-align: left;
+  }
 `;
 
 function openMap(idx) {
   window.location = '/?map=' + idx;
 }
+
 
 function App({query}) {
   const {map} = query;
@@ -36,12 +51,12 @@ function App({query}) {
         </div>
       {
        mapIdx > 1
-       ? <button onClick={() => openMap(mapIdx - 1)}>&lt; Previous</button>
+       ? <button onClick={() => setMap(mapIdx - 1)}>&lt; Previous</button>
        : <button disabled>&lt; Previous</button>
       }
       {
        mapIdx < maps.length
-       ? <button onClick={() => openMap(mapIdx + 1)}>Next &gt;</button>
+       ? <button onClick={() => setMap(mapIdx + 1)}>Next &gt;</button>
        : <button disabled>Next &gt;</button>
       }
       </Aside>

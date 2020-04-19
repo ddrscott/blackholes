@@ -41,8 +41,8 @@ class Goal {
     this.bodies = [];
   }
 
-  createBody(x, y) {
-    const body = rectangle(x + x_increment/2, y + y_increment * 0.3, x_increment * 2, y_increment, {
+  createBody(add, x, y) {
+    const body = add.rectangle(x + x_increment/2, y + y_increment * 0.3, x_increment * 2, y_increment, {
       isStatic: true,
       isSensor: true,
       render: {
@@ -87,26 +87,26 @@ export const config = {
   background: "transparent",
   layout: '',
   statics: {
-    'o': (x,y) => circle(x, y, x_increment/2 - (random() / 10 ), staticProps),
-    'O': (x,y) => circle(x, y, x_increment * 0.8 - (random() / 10 ), staticProps),
-    '|': (x,y) => rectangle(x, y, x_increment/2, y_increment+1, staticProps),
-    'i': (x,y) => [
-                    circle(x, y - y_increment / 4, 4, staticProps),
-                    rectangle(x, y + y_increment * 0.3, 8, 12.5, staticProps)
-                  ],
-    '^': (x,y) => {
-       let poly = polygon(x, y, 3, x_increment - random(), {
+    'o': (add, x,y) => add.circle(x, y, x_increment/2 - (random() / 10 ), staticProps),
+    'O': (add, x,y) => add.circle(x, y, x_increment * 0.8 - (random() / 10 ), staticProps),
+    '|': (add, x,y) => add.rectangle(x, y, x_increment/2, y_increment+1, staticProps),
+    'i': (add, x,y) => {
+                    add.circle(x, y - y_increment / 4, 4, staticProps),
+                    add.rectangle(x, y + y_increment * 0.3, 8, 12.5, staticProps)
+                  },
+    '^': (add, x,y) => {
+       let poly = add.polygon(x, y, 3, x_increment - random(), {
          angle: 35.08,
          ...CONSTRAINED_PROPS
        });
-       return [poly, constraint({ pointA: {x, y}, bodyB: poly, length: 0 })];
+       add.worldConstraint(poly, 0, 1, {pointA: {x, y}});
     }
     ,
-    'A': (x,y) => GOALS['A'].createBody(x,y),
-    'B': (x,y) => GOALS['B'].createBody(x,y),
-    'C': (x,y) => GOALS['C'].createBody(x,y),
-    'D': (x,y) => GOALS['D'].createBody(x,y),
-    'E': (x,y) => GOALS['E'].createBody(x,y),
+    'A': (add, x,y) => GOALS['A'].createBody(add, x,y),
+    'B': (add, x,y) => GOALS['B'].createBody(add, x,y),
+    'C': (add, x,y) => GOALS['C'].createBody(add, x,y),
+    'D': (add, x,y) => GOALS['D'].createBody(add, x,y),
+    'E': (add, x,y) => GOALS['E'].createBody(add, x,y),
   },
   goals: GOALS,
   audio: {

@@ -30,7 +30,7 @@ export default class MyDocument extends Document {
     return (
       <html>
         <Head>
-          <meta name="viewport" content="width=device-width, initial-scale=1" />
+          <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0" />
           <meta charSet="utf-8" />
           <link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon" />
           <script async src="https://www.googletagmanager.com/gtag/js?id=UA-50126719-6"></script>
@@ -58,6 +58,9 @@ export default class MyDocument extends Document {
           }
           small {
             font-size: .6em;
+          }
+          canvas {
+            touch-action: manipulation;
           }
         `}</style>
       </html>

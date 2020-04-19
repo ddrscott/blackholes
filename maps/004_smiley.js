@@ -2,10 +2,10 @@ import {config} from '../components/maps';
 import maps from '../maps';
 
 maps.push({
-  ...config,
-  background: "url('/bamboo-bg.jpg') center center",
-  name: "Smiley",
-  layout: `
+    ...config,
+    background: "url('/bamboo-bg.jpg') center center",
+    name: "Smiley",
+    layout: `
 |           O     O           |
 |                             |
 |                             |
@@ -34,9 +34,9 @@ O                             O
 |         o o     o o         |
 |                             |
 |                             |
-|  i                       i  |
-|  |  i  i  i  i  i  i  i  |  |
-|  |  |  |  |  |  |  |  |  |  |
+|  o                       o  |
+|  |  o                 o  |  |
+|  |  |  o  o  o  o  o  |  |  |
 |  |D |C |B |  |  |B |C |D |  |
 |  |  |  |  |  |  |  |  |  |  |`,
 });
