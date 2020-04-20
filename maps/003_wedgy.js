@@ -14,7 +14,7 @@ maps.push({
 |         O         O         |
 |          O       O          |
 |           O     O           |
-|                             |
+|            ^   ^            |
 |                             |
 |              ^              |
 |             o o             |
@@ -23,7 +23,7 @@ maps.push({
 |          o       o          |
 |         o         o         |
 O        o           o        O
-|       O             O       |
+|O      O             O      O|
 |                             |
 |                             |
 |     O                 O     |

@@ -1,13 +1,9 @@
-import dynamic from 'next/dynamic'
-import React, { useState } from 'react';
-import Matter from 'matter-js';
-import {Howl, Howler} from 'howler';
+import React  from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 import Phaser from 'phaser';
 import Board from '../lib/board';
-
-const {Engine, World, Bodies, Render} = Matter;
 
 const SAVED_STATS = ['score', 'total_clicks'];
 
@@ -15,19 +11,6 @@ const BONUS = {
     inc: 100,
     decay: 0.25
 }
-
-const Overlay = styled.section`
-    text-shadow: 0px 0px 8px #333;
-    position: absolute;
-    // background: rgba(0, 0, 0, 0.3);
-    width: auto;
-    right: 0;
-    z-index: 10;
-    text-align: right;
-    padding: 0.25em .5em;
-    user-select: none;
-    pointer-events: none;
-`
 
 const Underlay = styled.section`
     position: absolute;
@@ -109,6 +92,11 @@ class Game extends React.Component {
                     debug: false
                 }
             },
+            scale: {
+                mode: Phaser.Scale.FIT,
+                autoCenter: Phaser.Scale.CENTER_BOTH
+            },
+            disableContextMenu: true,
             scene: [Board]
         }
 
@@ -144,9 +132,6 @@ class Game extends React.Component {
             return;
         }
         this.on_second_interval = setInterval(() => this.onSecond(), 1000);
-
-        // setup audio
-        this.pings = map.audio.pings.map((src) => new Howl({src}));
 
         let bonus_generator = () => {
             if (!document.hidden) {
@@ -184,11 +169,6 @@ class Game extends React.Component {
 
         return (
             <div style={{transform: `scale(${this.state.transform_scale})`}}>
-                <Overlay>
-                    <Score>{this.state.score.toLocaleString()}</Score>
-                    <div><small>Bonus/Second:</small> {this.calcBonusPerSecond()}</div>
-                    <div><small>Clicks:</small> {this.state.total_clicks.toLocaleString()}</div>
-                </Overlay>
                 <div ref={el => this.el = el} id="phaser-game" style={{'zIndex': 1}}/>
                 { this.state.cheat &&
                 <div><small>Bonus Size:</small>
@@ -201,18 +181,21 @@ class Game extends React.Component {
                     />
                 </div>
                 }
-                <Underlay style={{background: map.background}}>
+                <Underlay>
                     <Title>Droppings</Title>
                     <MapName><MapSup>map</MapSup>{map.name}</MapName>
                 </Underlay>
                 <style jsx>{`
                   position: relative;
                   transform-origin: top;
-                  max-width: 480px;
                 `}</style>
             </div>
         );
     }
 }
+
+Game.propTypes = {
+    map: PropTypes.object
+};
 
 export default Game;
