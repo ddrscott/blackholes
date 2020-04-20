@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
+import Router from 'next/router'
 import styled from 'styled-components';
-import Link from 'next/link'
 import dynamic from 'next/dynamic'
 
 import '../maps/001_such_simple';
@@ -31,41 +31,45 @@ const Main = styled.main`
   }
 `;
 
-function openMap(idx) {
-  window.location = '/?map=' + idx;
-}
-
-
 function App({query}) {
-  const {map} = query;
+    const {map} = query;
 
-  let [mapIdx, setMap] = useState(maps[map - 1] ? parseInt(map) : 1);
-  return (
-    <Main>
-      <Aside>
-      </Aside>
-      <Game map={maps[mapIdx-1]} height={800} />
-      <Aside>
-        <div>
-        <small style={{whiteSpace: 'nowrap'}}>Map: {mapIdx} of {maps.length}</small>
-        </div>
-      {
-       mapIdx > 1
-       ? <button onClick={() => setMap(mapIdx - 1)}>&lt; Previous</button>
-       : <button disabled>&lt; Previous</button>
-      }
-      {
-       mapIdx < maps.length
-       ? <button onClick={() => setMap(mapIdx + 1)}>Next &gt;</button>
-       : <button disabled>Next &gt;</button>
-      }
-      </Aside>
-    </Main>
-  )
+    function openMap(idx) {
+        Router.push({
+            pathname: '/',
+            query: { map: idx },
+        })
+        setMap(idx);
+    }
+
+
+    let [mapIdx, setMap] = useState(maps[map - 1] ? parseInt(map) : 1);
+    return (
+        <Main>
+            <Aside>
+            </Aside>
+            <Game map={maps[mapIdx-1]} height={800} />
+            <Aside>
+                <div>
+                    <small style={{whiteSpace: 'nowrap'}}>Map: {mapIdx} of {maps.length}</small>
+                </div>
+                {
+                    mapIdx > 1
+                        ? <button onClick={() => openMap(mapIdx - 1)}>&lt; Previous</button>
+                        : <button disabled>&lt; Previous</button>
+                }
+                {
+                    mapIdx < maps.length
+                        ? <button onClick={() => openMap(mapIdx + 1)}>Next &gt;</button>
+                        : <button disabled>Next &gt;</button>
+                }
+            </Aside>
+        </Main>
+    )
 }
 
-App.getInitialProps = ({res, query}) => {
-  return {query}
+App.getInitialProps = ({query}) => {
+    return {query}
 }
 
 export default App;
