@@ -14,14 +14,14 @@ import maps from '../maps';
 const Game = dynamic(() => import('../components/game'), { ssr: false });
 
 const Aside = styled.aside`
-  padding: .5em;
+  padding: .25em;
 `;
 
 
 const Main = styled.main`
   width: 100%;
   display: flex;
-  flex-direction: column-reverse;
+  flex-direction: column;
   text-align: center;
 
   @media (min-width: 600px) {
