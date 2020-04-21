@@ -4,6 +4,7 @@ import styled from 'styled-components';
 
 import Phaser from 'phaser';
 import Board from '../lib/board';
+import Preload from '../lib/preload';
 
 const BONUS = {
     inc: 100,
@@ -79,8 +80,6 @@ class Game extends React.Component {
             parent: 'phaser-game',
             width: 480,
             height: 800,
-            transparent: true,
-            pixelArt: true,
             physics: {
                 default: 'matter',
                 matter: {
@@ -92,17 +91,17 @@ class Game extends React.Component {
                 autoCenter: Phaser.Scale.CENTER_BOTH
             },
             disableContextMenu: true,
-            scene: [Board]
+            scene: [Preload, Board]
         }
 
         this.game = new Phaser.Game(config);
         this.game.canvas.oncontextmenu = (e) => e.preventDefault();
-        this.game.scene.start('main', {stage: map, component: this});
+        this.game.scene.start('preload', {stage: map});
     }
 
     componentDidUpdate({map}) {
         if (map != this.props.map) {
-            this.game.scene.start('main', {stage: this.props.map, component: this});
+            this.game.scene.start('board', {stage: this.props.map});
         }
     }
 
