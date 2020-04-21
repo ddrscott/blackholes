@@ -14,9 +14,10 @@ import maps from '../maps';
 const Game = dynamic(() => import('../components/game'), { ssr: false });
 
 const Aside = styled.aside`
-  padding: .25em;
+  @media (min-width: 480px) {
+    padding: 0.25em;
+  }
 `;
-
 
 const Main = styled.main`
   width: 100%;
@@ -24,7 +25,7 @@ const Main = styled.main`
   flex-direction: column;
   text-align: center;
 
-  @media (min-width: 600px) {
+  @media (min-width: 480px) {
     flex-direction: row;
     justify-content: center;
     text-align: left;
@@ -46,13 +47,8 @@ function App({query}) {
     let [mapIdx, setMap] = useState(maps[map - 1] ? parseInt(map) : 1);
     return (
         <Main>
-            <Aside>
-            </Aside>
             <Game map={maps[mapIdx-1]} height={800} />
             <Aside>
-                <div>
-                    <small style={{whiteSpace: 'nowrap'}}>Map: {mapIdx} of {maps.length}</small>
-                </div>
                 {
                     mapIdx > 1
                         ? <button onClick={() => openMap(mapIdx - 1)}>&lt; Previous</button>
@@ -63,6 +59,9 @@ function App({query}) {
                         ? <button onClick={() => openMap(mapIdx + 1)}>Next &gt;</button>
                         : <button disabled>Next &gt;</button>
                 }
+                <div>
+                    <small style={{whiteSpace: 'nowrap'}}>Map: {mapIdx} of {maps.length}</small>
+                </div>
             </Aside>
         </Main>
     )
