@@ -6,8 +6,8 @@ maps.push({
     background: "url('/bamboo-bg.jpg') center center",
     name: "Wedgy",
     layout: `
-|    O                   O    |
-|     O                 O     |
+|                             |
+|                             |
 |      O               O      |
 |       O             O       |
 |        O           O        |

@@ -80,6 +80,7 @@ class Game extends React.Component {
             width: 480,
             height: 800,
             transparent: true,
+            pixelArt: true,
             physics: {
                 default: 'matter',
                 matter: {
