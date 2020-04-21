@@ -95,7 +95,8 @@ class Game extends React.Component {
         }
 
         this.game = new Phaser.Game(config);
-        this.game.canvas.oncontextmenu = function (e) { e.preventDefault(); }
+        this.game.canvas.oncontextmenu = (e) => e.preventDefault();
+        this.game.input.touch.capture = false;
         this.game.scene.start('main', {stage: map, component: this});
     }
 
