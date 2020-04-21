@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import Phaser from 'phaser';
 import Board from '../lib/board';
 import Preload from '../lib/preload';
+import Overlay from '../lib/overlay';
 
 const BONUS = {
     inc: 100,
@@ -91,7 +92,7 @@ class Game extends React.Component {
                 autoCenter: Phaser.Scale.CENTER_BOTH
             },
             disableContextMenu: true,
-            scene: [Preload, Board]
+            scene: [Preload, Board, Overlay]
         }
 
         this.game = new Phaser.Game(config);
