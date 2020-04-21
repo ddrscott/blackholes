@@ -5,8 +5,6 @@ import styled from 'styled-components';
 import Phaser from 'phaser';
 import Board from '../lib/board';
 
-const SAVED_STATS = ['score', 'total_clicks'];
-
 const BONUS = {
     inc: 100,
     decay: 0.25
@@ -60,12 +58,8 @@ class Game extends React.Component {
         super(props);
         this.state = {
             score: 0,
-            bonus_delay: 500,
-            total_clicks: 0,
-            clicks_per_second: 0,
             bonus_size: 8,
             cheat: false,
-            transform_scale: 1,
         };
     }
 
@@ -112,79 +106,14 @@ class Game extends React.Component {
     }
 
 
-    loadSavedState() {
-        for (const key of SAVED_STATS) {
-            let value = parseInt(localStorage.getItem(key) || '0');
-            this.setState({[key]: value});
-        }
-    }
-
-    saveSavesState() {
-        for (const key of SAVED_STATS) {
-            localStorage.setItem(key, this.state[key]);
-        }
-    }
-
-    onStart() {
-        const {map} = this.props;
-
-        if (this.on_second_interval) {
-            return;
-        }
-        this.on_second_interval = setInterval(() => this.onSecond(), 1000);
-
-        let bonus_generator = () => {
-            if (!document.hidden) {
-                map.onBonus(this);
-            }
-            window.setTimeout(bonus_generator, this.state.bonus_delay );
-        };
-        bonus_generator();
-    }
-
-    onSecond() {
-        this.saveSavesState();
-
-        let {bonus_delay} = this.state;
-
-        bonus_delay = bonus_delay + (bonus_delay * BONUS.decay);
-        if (bonus_delay > 1000)
-            bonus_delay = 1000;
-        this.setState({bonus_delay});
-    }
-
     componentWillUnmount() {
-        if (this.on_second_interval) {
-            clearInterval(this.on_second_interval);
-            delete this.on_second_interval;
-        }
-    }
-
-    calcBonusPerSecond() {
-        return (1000/this.state.bonus_delay).toFixed(1);
+        this.game.scene.restart();
     }
 
     render() {
-        const {map} = this.props;
-
         return (
-            <div style={{transform: `scale(${this.state.transform_scale})`}}>
+            <div>
                 <div ref={el => this.el = el} id="phaser-game" style={{'zIndex': 1}}/>
-                { this.state.cheat &&
-                <div><small>Bonus Size:</small>
-                    <input
-                        type="number" 
-                        min="1"
-                        max="100"
-                        value={this.state.bonus_size}
-                        onChange={(e) => this.setState({bonus_size: e.target.value})}
-                    />
-                </div>
-                }
-                <Underlay>
-                    <Title>Droppings</Title>
-                    <MapName><MapSup>map</MapSup>{map.name}</MapName>
-                </Underlay>
                 <style jsx>{`
                   position: relative;
                   transform-origin: top;
