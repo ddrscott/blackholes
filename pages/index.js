@@ -48,21 +48,24 @@ function App({query}) {
     return (
         <Main>
             <Game map={maps[mapIdx-1]} height={800} />
-            <Aside>
-                {
-                    mapIdx > 1
-                        ? <button onClick={() => openMap(mapIdx - 1)}>&lt; Previous</button>
-                        : <button disabled>&lt; Previous</button>
-                }
-                {
-                    mapIdx < maps.length
-                        ? <button onClick={() => openMap(mapIdx + 1)}>Next &gt;</button>
-                        : <button disabled>Next &gt;</button>
-                }
-                <div>
-                    <small style={{whiteSpace: 'nowrap'}}>Map: {mapIdx} of {maps.length}</small>
-                </div>
-            </Aside>
+            {
+                query.map &&
+                <Aside>
+                    {
+                        mapIdx > 1
+                            ? <button onClick={() => openMap(mapIdx - 1)}>&lt; Previous</button>
+                            : <button disabled>&lt; Previous</button>
+                    }
+                    {
+                        mapIdx < maps.length
+                            ? <button onClick={() => openMap(mapIdx + 1)}>Next &gt;</button>
+                            : <button disabled>Next &gt;</button>
+                    }
+                    <div>
+                        <small style={{whiteSpace: 'nowrap'}}>Map: {mapIdx} of {maps.length}</small>
+                    </div>
+                </Aside>
+            }
         </Main>
     )
 }

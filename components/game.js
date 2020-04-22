@@ -53,7 +53,7 @@ class Game extends React.Component {
     }
 
     componentDidUpdate({map}) {
-        if (map != this.props.map) {
+        if (map !== this.props.map) {
             this.game.scene.start('board', {stage: this.props.map});
         }
     }
