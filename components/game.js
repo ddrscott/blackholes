@@ -10,11 +10,6 @@ class Game extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = {
-            score: 0,
-            bonus_size: 8,
-            cheat: false,
-        };
     }
 
     componentDidMount() {
@@ -29,7 +24,7 @@ class Game extends React.Component {
         const {map} = this.props,
             natural = {width: 480, height: 800};
 
-        const config = {
+        this.game = new Phaser.Game({
             type: Phaser.AUTO,
             parent: 'phaser-game',
             width: natural.width > window.innerWidth ? window.innerWidth : natural.width,
@@ -46,13 +41,11 @@ class Game extends React.Component {
             },
             disableContextMenu: true,
             scene: [Preload, Board, Overlay]
-        }
-
-        this.game = new Phaser.Game(config);
+        });
         this.game.canvas.oncontextmenu = (e) => e.preventDefault();
         this.game.scene.start('preload', {stage: map});
     }
-
+  
     componentDidUpdate({map}) {
         if (map !== this.props.map) {
             this.game.scene.start('board', {stage: this.props.map});
@@ -66,13 +59,9 @@ class Game extends React.Component {
 
     render() {
         return (
-            <div>
-                <div ref={el => this.el = el} id="phaser-game" style={{'zIndex': 1}}/>
-                <style jsx>{`
-                  position: relative;
-                  transform-origin: top;
-                `}</style>
-            </div>
+        <>
+            <div ref={el => this.el = el} id="phaser-game" style={{'zIndex': 1}}/>
+        </>
         );
     }
 }
