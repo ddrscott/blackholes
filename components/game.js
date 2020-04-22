@@ -26,13 +26,14 @@ class Game extends React.Component {
     }
 
     setupPhaser() {
-        const {map} = this.props;
+        const {map} = this.props,
+            natural = {width: 480, height: 800};
 
         const config = {
             type: Phaser.AUTO,
             parent: 'phaser-game',
-            width: 480,
-            height: 800,
+            width: natural.width > window.innerWidth ? window.innerWidth : natural.width,
+            height: natural.height > window.innerHeight ? window.innerHeight : natural.height,
             physics: {
                 default: 'matter',
                 matter: {
