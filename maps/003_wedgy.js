@@ -5,8 +5,8 @@ maps.push({
     ...config,
     name: "Wedgy",
     layout: `
-|                             |
-|                             |
+|    O                   O    |
+|     O                 O     |
 |      O               O      |
 |       O             O       |
 |        O           O        |
