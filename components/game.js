@@ -60,7 +60,7 @@ class Game extends React.Component {
     render() {
         return (
         <>
-            <div ref={el => this.el = el} id="phaser-game" style={{'zIndex': 1}}/>
+            <div ref={el => this.el = el} id="phaser-game"/>
         </>
         );
     }
