@@ -3,7 +3,6 @@ import maps from '../maps';
 
 maps.push({
     ...config,
-    background: "url('/bamboo-bg.jpg') center center",
     name: "Biggie Size",
     layout: `
 |           |     |           |
