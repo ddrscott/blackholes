@@ -12,6 +12,7 @@
   "dependencies": {
     "next": ">=9.3.2",
     "phaser": "^3.22.0",
+    "phaser3-rex-plugins": "^1.1.13",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-measure": "^2.3.0",
