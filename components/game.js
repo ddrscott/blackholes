@@ -11,19 +11,8 @@ const natural = {
     width: 480,
     height: 800
 };
+
 class Game extends React.Component {
-
-    constructor(props) {
-        super(props);
-    }
-
-    componentDidMount() {
-        const url = window.location.href
-        if (url.indexOf('cheat') > -1) {
-            this.setState({cheat: true});
-        }
-        this.setupPhaser();
-    }
 
     setupPhaser() {
         const {map} = this.props;
@@ -62,6 +51,15 @@ class Game extends React.Component {
         this.game.canvas.oncontextmenu = (e) => e.preventDefault();
         this.game.scene.start('preload', {stage: map});
     }
+
+    componentDidMount() {
+        const url = window.location.href
+        if (url.indexOf('cheat') > -1) {
+            this.setState({cheat: true});
+        }
+        this.setupPhaser();
+    }
+
 
     componentDidUpdate({map}) {
         if (map !== this.props.map) {
