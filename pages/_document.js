@@ -1,5 +1,6 @@
 import Document, { Head, Main, NextScript } from "next/document";
 import { ServerStyleSheet } from 'styled-components'
+import React from 'react';
 
 export default class MyDocument extends Document {
     static async getInitialProps(ctx) {
@@ -31,6 +32,8 @@ export default class MyDocument extends Document {
             <html>
                 <Head>
                     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+                    <meta name="mobile-web-app-capable" content="yes" />
+                    <meta name="apple-mobile-web-app-capable" content="yes" />
                     <meta charSet="utf-8" />
                     <link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon" />
                     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-50126719-6"></script>
