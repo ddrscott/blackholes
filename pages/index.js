@@ -66,6 +66,12 @@ function App({query}) {
                     </div>
                 </Aside>
             }
+            <style jsx>{`
+                @font-face {
+                    font-family: 'Nine Pin';
+                    src: url('/Nine Pin.ttf');
+                }
+              `}</style>
         </Main>
     )
 }

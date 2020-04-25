@@ -25,6 +25,9 @@ class Game extends React.Component {
             // width: natural.width * window.devicePixelRatio,
             // height: natural.height * window.devicePixelRatio,
             ...natural,
+            dom: {
+                createContainer: true
+            },
             fps: 60,
             physics: {
                 default: 'matter',
@@ -34,7 +37,7 @@ class Game extends React.Component {
             },
             scale: {
                 mode: Phaser.Scale.FIT,
-                autoCenter: Phaser.Scale.CENTER_BOTH
+                autoCenter: Phaser.Scale.CENTER_HORIZONTALLY
             },
             disableContextMenu: true,
             scene: [Preload, Board, Overlay],
@@ -48,7 +51,6 @@ class Game extends React.Component {
             }
         });
         console.log(this.game.config);
-        this.game.canvas.oncontextmenu = (e) => e.preventDefault();
         this.game.scene.start('preload', {stage: map});
     }
 

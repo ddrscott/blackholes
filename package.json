@@ -11,6 +11,7 @@
   "license": "ISC",
   "dependencies": {
     "next": ">=9.3.2",
+    "next-fonts": "^1.1.0",
     "phaser": "^3.22.0",
     "phaser3-rex-plugins": "^1.1.13",
     "react": "^16.13.1",

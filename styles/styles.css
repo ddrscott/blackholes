@@ -1,9 +1,8 @@
 *, *::before, *::after {
-  box-sizing: border-box
+  box-sizing: border-box;
 }
 
 html, body {
-  font-family: "Lucida Console", Monaco, monospace;
   width: 100%;
   height: 100%;
   margin: 0;
@@ -14,4 +13,48 @@ html, body {
 
 small {
   font-size: .6em;
+}
+
+.nine-pin {
+    font-family: "Nine Pin", Monaco, monospace;
+    letter-spacing: 2px;
+}
+
+.score-panel {
+  background-color: rgba(51, 64, 74,.7); /* #33404a; */
+  display: flex;
+  flex: row;
+  width: 480px;
+  padding: 0 0.5em;
+  padding-bottom: 5px;
+  border-bottom: 1px solid #333;
+}
+
+.score-panel-label {
+  font-size: 12px;
+  opacity: 0.5;
+  line-height: 1.5;
+}
+
+.stage .score {
+  font-weight: bold;
+}
+
+.score-panel-left {
+  flex: 1;
+  text-align: left;
+}
+
+.score-panel-right {
+  flex: 1;
+  text-align: right;
+}
+
+.stats {
+    text-align: right;
+    width: 480px;
+    padding: 0 0.5em;
+    padding-top: 0.5em;
+    white-space: pre;
+    font-size: .8em;
 }
