@@ -1,3 +1,9 @@
+:root {
+    --full-width: 480px;
+    --break-point-phone: 480px;
+    --fade-bg-color: rgba(51, 64, 74,.7);
+}
+
 *, *::before, *::after {
   box-sizing: border-box;
 }
@@ -15,19 +21,45 @@ small {
   font-size: .6em;
 }
 
+.react-draggable, .cursor {
+    cursor: move;
+}
+
+.no-cursor {
+    cursor: auto;
+}
+
+.no-select {
+  -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Old versions of Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome, Opera and Firefox */
+}
+
+.toolbar {
+
+}
+
+.smooth-move {
+    transition: all 1s ease-in-out;
+}
+
 .nine-pin {
     font-family: "Nine Pin", Monaco, monospace;
     letter-spacing: 2px;
 }
 
 .score-panel {
-  background-color: rgba(51, 64, 74,.7); /* #33404a; */
+  background-color: var(--fade-bg-color);
   display: flex;
   flex: row;
-  width: 480px;
+  width: var(--full-width);
   padding: 0 0.5em;
   padding-bottom: 5px;
-  border-bottom: 1px solid #333;
+  box-shadow: 0px 5px 20px rgba(0,0,0,.5);
 }
 
 .score-panel-label {
@@ -52,9 +84,69 @@ small {
 
 .stats {
     text-align: right;
-    width: 480px;
+    width: var(--full-width);
     padding: 0 0.5em;
     padding-top: 0.5em;
     white-space: pre;
     font-size: .8em;
+}
+
+.menu {
+    display: none;
+    background-color: var(--fade-bg-color);
+    display: flex;
+    flex: column;
+    margin-left: 1.5em;
+    width: calc(var(--full-width) - 3em);
+
+    padding: 0 0.5em;
+    margin-top: 1em;
+    padding-bottom: 5px;
+    display: none;
+    border-radius: 1em;
+    opacity: 0;
+}
+
+.menu.active {
+    display: block;
+    opacity: 1;
+}
+
+.toolbar {
+    background-color: var(--fade-bg-color);
+    border-radius: 1em;
+    /* border: 1px solid rgba(200,200,200,.5); */
+    box-shadow: 0px 5px 20px rgba(0,0,0,.5);
+    
+    font-family: "Nine Pin", Monaco, monospace;
+    font-size: .6em;
+    padding: 0.5em;
+    position: fixed;
+    right: 2em;
+    top: 8em;
+    text-align: center;
+}
+
+@media (min-width: 480px) {
+    .toolbar {
+        right: calc(50vw - 320px);
+    }
+}
+
+.toolbar * {
+    padding: 0;
+    margin: .5em auto;
+}
+
+.toolbar-tool {
+    line-height: 2;
+    /* width: 3em; */
+    padding: 0 1em;
+    border: 2px solid #888;
+    border-radius: 1.5em;
+    cursor: pointer;
+}
+
+.toolbar .selected {
+    border-color: white;
 }

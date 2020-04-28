@@ -14,18 +14,18 @@ import maps from '../maps';
 const Game = dynamic(() => import('../components/game'), { ssr: false });
 
 const Aside = styled.aside`
-  @media (min-width: 480px) {
+  @media (min-width: 500px) {
     padding: 0.25em;
   }
 `;
 
 const Main = styled.main`
   width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
-  text-align: center;
 
-  @media (min-width: 480px) {
+  @media (min-width: var(--breakpoint-phone)) {
     flex-direction: row;
     justify-content: center;
     text-align: left;

@@ -5,7 +5,7 @@ maps.push({
     ...config,
     name: "Just Air",
     layout: `
-|  |  |  |  |     |  |  |  |  |
+|                             |
 |                             |
 |                             |
 |                             |

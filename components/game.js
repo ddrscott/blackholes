@@ -1,11 +1,13 @@
-import React  from 'react';
-import PropTypes from 'prop-types';
-
 import Phaser from 'phaser';
 import RexUIPlugin from 'phaser3-rex-plugins/templates/ui/ui-plugin.js';
+import PropTypes from 'prop-types';
+import React from 'react';
+import {Toolbar, TOOLS} from '../components/toolbar';
 import Board from '../lib/board';
-import Preload from '../lib/preload';
 import Overlay from '../lib/overlay';
+import Preload from '../lib/preload';
+
+
 
 const natural = {
     width: 480,
@@ -14,12 +16,19 @@ const natural = {
 
 class Game extends React.Component {
 
+    constructor(props) {
+        super(props);
+        this.state = {
+            tool: TOOLS[0]
+        };
+    }
+
     setupPhaser() {
         const {map} = this.props;
 
         this.game = new Phaser.Game({
             type: Phaser.AUTO,
-            parent: 'body',
+            parent: 'phaser',
             // width: natural.width > window.innerWidth ? window.innerWidth : natural.width,
             // height: natural.height > window.innerHeight ? window.innerHeight : natural.height,
             // width: natural.width * window.devicePixelRatio,
@@ -28,16 +37,17 @@ class Game extends React.Component {
             dom: {
                 createContainer: true
             },
-            fps: 60,
             physics: {
                 default: 'matter',
                 matter: {
-                    debug: false
+                    plugins: {
+                        attractors: true,
+                    }
                 }
             },
             scale: {
                 mode: Phaser.Scale.FIT,
-                autoCenter: Phaser.Scale.CENTER_HORIZONTALLY
+                autoCenter: Phaser.Scale.CENTER_BOTH,
             },
             disableContextMenu: true,
             scene: [Preload, Board, Overlay],
@@ -51,6 +61,7 @@ class Game extends React.Component {
             }
         });
         console.log(this.game.config);
+        this.game.getState = (k) => this.state[k]
         this.game.scene.start('preload', {stage: map});
     }
 
@@ -76,13 +87,19 @@ class Game extends React.Component {
 
     render() {
         return (
-            <></>
+            <>
+                <div id="phaser">
+                    <Toolbar className="no-select"
+                        onChange={(tool) => this.setState({tool})}
+                    />
+                </div>
+            </>
         );
     }
 }
 
 Game.propTypes = {
-    map: PropTypes.object
+    map: PropTypes.object.isRequired
 };
 
 export default Game;
