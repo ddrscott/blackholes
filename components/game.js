@@ -100,6 +100,10 @@ class Game extends React.Component {
     }
 
     restartScene() {
+        // this.game.scene.restart();
+        this.game.scene.stop('preload', {stage: this.props.map});
+        this.game.scene.start('preload', {stage: this.props.map});
+        this.game.scene.stop('board', {stage: this.props.map});
         this.game.scene.start('board', {stage: this.props.map});
     }
 
