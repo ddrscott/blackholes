@@ -1,16 +1,19 @@
 :root {
-    --full-width: 480px;
-    --break-point-phone: 480px;
-    --fade-bg-color: rgba(51, 64, 74,.7);
+  --full-width: 480px;
+  --break-point-phone: 480px;
+  --fade-bg-color: rgba(51, 64, 74,.7);
+}
+
+@font-face {
+  font-family: 'Nine Pin';
+  src: url('/Nine Pin.ttf');
 }
 
 *, *::before, *::after {
   box-sizing: border-box;
 }
 
-html, body {
-  width: 100%;
-  height: 100%;
+body {
   margin: 0;
   padding: 0;
   background: #33404a;
@@ -22,47 +25,55 @@ small {
 }
 
 .react-draggable, .cursor {
-    cursor: move;
+  cursor: move;
 }
 
 .no-cursor {
-    cursor: auto;
+  cursor: auto;
 }
 
 .no-select {
   -webkit-touch-callout: none; /* iOS Safari */
-    -webkit-user-select: none; /* Safari */
-     -khtml-user-select: none; /* Konqueror HTML */
-       -moz-user-select: none; /* Old versions of Firefox */
-        -ms-user-select: none; /* Internet Explorer/Edge */
-            user-select: none; /* Non-prefixed version, currently
-                                  supported by Chrome, Opera and Firefox */
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Old versions of Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none; /* Non-prefixed version, currently
+  supported by Chrome, Opera and Firefox */
+}
+
+.game {
+  position: absolute;
+  top: 0;
+  height: 0;
+  pointer-events: none;
 }
 
 .toolbar {
-
+  pointer-events: auto;
 }
 
 .smooth-move {
-    transition: all 1s ease-in-out;
+  transition: all 1s ease-in-out;
 }
 
 .nine-pin {
-    font-family: "Nine Pin", Monaco, monospace;
-    letter-spacing: 2px;
+  font-family: "Nine Pin", Monaco, monospace;
+  letter-spacing: 2px;
 }
 
-.score-panel {
+.score-board {
+  top: 0;
   background-color: var(--fade-bg-color);
   display: flex;
   flex: row;
-  width: var(--full-width);
+  /* max-width: var(--full-width); */
   padding: 0 0.5em;
   padding-bottom: 5px;
   box-shadow: 0px 5px 20px rgba(0,0,0,.5);
 }
 
-.score-panel-label {
+.score-board-label {
   font-size: 12px;
   opacity: 0.5;
   line-height: 1.5;
@@ -72,81 +83,87 @@ small {
   font-weight: bold;
 }
 
-.score-panel-left {
+.score-board-left {
   flex: 1;
   text-align: left;
 }
 
-.score-panel-right {
+.score-board-right {
   flex: 1;
   text-align: right;
 }
 
+/*
 .stats {
-    text-align: right;
-    width: var(--full-width);
-    padding: 0 0.5em;
-    padding-top: 0.5em;
-    white-space: pre;
-    font-size: .8em;
+text-align: right;
+width: var(--full-width);
+padding: 0 0.5em;
+padding-top: 0.5em;
+white-space: pre;
+font-size: .8em;
 }
+ */
+  /*
+  .menu {
+  display: none;
+  background-color: var(--fade-bg-color);
+  display: flex;
+  flex: column;
+  margin-left: 1.5em;
+  width: calc(var(--full-width) - 3em);
 
-.menu {
-    display: none;
+  padding: 0 0.5em;
+  margin-top: 1em;
+  padding-bottom: 5px;
+  display: none;
+  border-radius: 1em;
+  opacity: 0;
+  }
+
+  .menu.active {
+  display: block;
+  opacity: 1;
+  }
+   */
+
+  .toolbar {
     background-color: var(--fade-bg-color);
-    display: flex;
-    flex: column;
-    margin-left: 1.5em;
-    width: calc(var(--full-width) - 3em);
-
-    padding: 0 0.5em;
-    margin-top: 1em;
-    padding-bottom: 5px;
-    display: none;
     border-radius: 1em;
-    opacity: 0;
-}
-
-.menu.active {
-    display: block;
-    opacity: 1;
-}
-
-.toolbar {
-    background-color: var(--fade-bg-color);
-    border-radius: 1em;
-    /* border: 1px solid rgba(200,200,200,.5); */
     box-shadow: 0px 5px 20px rgba(0,0,0,.5);
-    
+
     font-family: "Nine Pin", Monaco, monospace;
     font-size: .6em;
     padding: 0.5em;
-    position: fixed;
-    right: 2em;
-    top: 8em;
+
+    margin: 2em;
+    float: right;
+    display: inline-block;
+
+    /* position: fixed; */
+    /* right: 2em; */
+    /* top: 8em; */
     text-align: center;
-}
+  }
 
-@media (min-width: 480px) {
+  @media (min-width: 600px) {
     .toolbar {
-        right: calc(50vw - 320px);
+      right: calc(50vw - 340px);
     }
-}
+  }
 
-.toolbar * {
+  .toolbar * {
     padding: 0;
     margin: .5em auto;
-}
+  }
 
-.toolbar-tool {
+  .toolbar-tool {
     line-height: 2;
-    /* width: 3em; */
     padding: 0 1em;
     border: 2px solid #888;
     border-radius: 1.5em;
     cursor: pointer;
-}
+  }
 
-.toolbar .selected {
+  .toolbar .selected {
     border-color: white;
-}
+  }

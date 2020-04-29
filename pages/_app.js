@@ -1,4 +1,5 @@
 import '../styles/reset.css';
+import '../styles/aspect_ratio.css';
 import '../styles/styles.css';
 
 function MyApp({ Component, pageProps }) {

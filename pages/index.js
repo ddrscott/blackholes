@@ -13,24 +13,25 @@ import maps from '../maps';
 
 const Game = dynamic(() => import('../components/game'), { ssr: false });
 
-const Aside = styled.aside`
-  @media (min-width: 500px) {
-    padding: 0.25em;
-  }
-`;
+// const Aside = styled.aside`
+//   text-align: center;
+//   @media (min-width: 500px) {
+//     padding: 0.25em;
+//   }
+// `;
 
-const Main = styled.main`
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
+// const Main = styled.main`
+//   width: 100%;
+//   height: 100%;
+//   display: flex;
+//   flex-direction: column;
 
-  @media (min-width: var(--breakpoint-phone)) {
-    flex-direction: row;
-    justify-content: center;
-    text-align: left;
-  }
-`;
+//   @media (min-width: var(--breakpoint-phone)) {
+//     flex-direction: row;
+//     justify-content: center;
+//     text-align: left;
+//   }
+// `;
 
 function App({query}) {
     const {map} = query;
@@ -45,34 +46,10 @@ function App({query}) {
 
 
     let [mapIdx, setMap] = useState(maps[map - 1] ? parseInt(map) : 1);
-    return (
-        <Main>
-            <Game map={maps[mapIdx-1]} height={800} />
-            {
-                query.map &&
-                <Aside>
-                    {
-                        mapIdx > 1
-                            ? <button onClick={() => openMap(mapIdx - 1)}>&lt; Previous</button>
-                            : <button disabled>&lt; Previous</button>
-                    }
-                    {
-                        mapIdx < maps.length
-                            ? <button onClick={() => openMap(mapIdx + 1)}>Next &gt;</button>
-                            : <button disabled>Next &gt;</button>
-                    }
-                    <div>
-                        <small style={{whiteSpace: 'nowrap'}}>Map: {mapIdx} of {maps.length}</small>
-                    </div>
-                </Aside>
-            }
-            <style jsx>{`
-                @font-face {
-                    font-family: 'Nine Pin';
-                    src: url('/Nine Pin.ttf');
-                }
-              `}</style>
-        </Main>
+    return (<>
+        <Game className="game" map={maps[mapIdx-1]} />
+        <div id="phaser"></div>
+        </>
     )
 }
 

@@ -3,8 +3,8 @@ import RexUIPlugin from 'phaser3-rex-plugins/templates/ui/ui-plugin.js';
 import PropTypes from 'prop-types';
 import React from 'react';
 import {Toolbar, TOOLS} from '../components/toolbar';
+import {ScoreBoard} from '../components/score-board';
 import Board from '../lib/board';
-import Overlay from '../lib/overlay';
 import Preload from '../lib/preload';
 
 
@@ -19,7 +19,9 @@ class Game extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            tool: TOOLS[0]
+            tool: TOOLS[0],
+            score: 0,
+            logs: 'Loading...'
         };
     }
 
@@ -34,9 +36,9 @@ class Game extends React.Component {
             // width: natural.width * window.devicePixelRatio,
             // height: natural.height * window.devicePixelRatio,
             ...natural,
-            dom: {
-                createContainer: true
-            },
+            // dom: {
+            //     createContainer: true
+            // },
             physics: {
                 default: 'matter',
                 matter: {
@@ -47,10 +49,10 @@ class Game extends React.Component {
             },
             scale: {
                 mode: Phaser.Scale.FIT,
-                autoCenter: Phaser.Scale.CENTER_BOTH,
+                autoCenter: Phaser.Scale.CENTER_HORIZONTALLY,
             },
             disableContextMenu: true,
-            scene: [Preload, Board, Overlay],
+            scene: [Preload, Board],
             plugins: {
                 scene: [{
                     key: 'rexUI',
@@ -61,8 +63,14 @@ class Game extends React.Component {
             }
         });
         console.log(this.game.config);
-        this.game.getState = (k) => this.state[k]
+        this.game.getState = (k) => this.state[k];
         this.game.scene.start('preload', {stage: map});
+
+        this.game.events.on('score', (score) => this.setState({score}));
+        this.game.events.on('logs', (logs) => this.setState({logs}));
+        this.game.scale.on('resize', () => this.resizeContainer());
+
+        this.resizeContainer();
     }
 
     componentDidMount() {
@@ -85,16 +93,20 @@ class Game extends React.Component {
         this.game.scene.restart();
     }
 
+    resizeContainer() {
+        window.setTimeout(() => {
+            const canvasStyle = document.querySelector('#phaser canvas').getAttribute("style");
+            document.querySelector('.game').setAttribute("style", canvasStyle);
+        }, 10);
+    }
+
     render() {
-        return (
-            <>
-                <div id="phaser">
-                    <Toolbar className="no-select"
-                        onChange={(tool) => this.setState({tool})}
-                    />
-                </div>
-            </>
-        );
+        return <div className="game no-select">
+            <ScoreBoard title={this.props.map.name} score={this.state.score} logs={this.state.logs} />
+            <Toolbar className="no-select"
+                onChange={(tool) => this.setState({tool})}
+            />
+        </div>;
     }
 }
 
