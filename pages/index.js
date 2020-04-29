@@ -48,7 +48,6 @@ function App({query}) {
     let [mapIdx, setMap] = useState(maps[map - 1] ? parseInt(map) : 1);
     return (<>
         <Game className="game" map={maps[mapIdx-1]} />
-        <div id="phaser"></div>
         </>
     )
 }
