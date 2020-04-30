@@ -129,7 +129,7 @@ font-size: .8em;
 
   .toolbar {
     background-color: var(--fade-bg-color);
-    border-radius: 1em;
+    border-radius: 1.5em;
     box-shadow: 0px 5px 20px rgba(0,0,0,.5);
 
     font-family: "Nine Pin", Monaco, monospace;
@@ -153,8 +153,11 @@ font-size: .8em;
   }
 
   .toolbar * {
-    padding: 0;
-    margin: .5em auto;
+    line-height: 2;
+    margin-top: .5em;
+  }
+  .toolbar-header {
+    padding: 0 1em;
   }
 
   .toolbar-tool {
