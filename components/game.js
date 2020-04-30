@@ -6,7 +6,6 @@ import {Toolbar, TOOLS} from '../components/toolbar';
 import {ScoreBoard} from '../components/score-board';
 import Board from '../lib/board';
 import Preload from '../lib/preload';
-import Draggable from 'react-draggable';
 
 
 const natural = {
@@ -110,11 +109,9 @@ class Game extends React.Component {
     render() {
         return <div className="game no-select">
             <ScoreBoard title={this.props.map.name} score={this.state.score} logs={this.state.logs} onClick={() => this.restartScene()} />
-            <Draggable>
-                <Toolbar className="no-select"
-                    onChange={(tool) => this.setState({tool})}
-                />
-            </Draggable>
+            <Toolbar className="no-select"
+                onChange={(tool) => this.setState({tool})}
+            />
         </div>;
     }
 }
