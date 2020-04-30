@@ -1,7 +1,7 @@
 :root {
   --full-width: 480px;
   --break-point-phone: 480px;
-  --fade-bg-color: rgba(51, 64, 74,.7);
+  --fade-bg-color: rgba(51, 64, 74,.8);
 }
 
 @font-face {
@@ -41,17 +41,19 @@ small {
   user-select: none; /* Non-prefixed version, currently supported by Chrome, Opera and Firefox */
 }
 
+.hidden {
+  display: none !important;
+}
+
 .game {
   position: absolute;
   top: 0;
-  height: 0;
   pointer-events: none;
-}
-.game * {
-  pointer-events: auto;
+  text-align: center;
 }
 
-.toolbar {
+.game * {
+  pointer-events: auto;
 }
 
 .smooth-move {
@@ -61,6 +63,14 @@ small {
 .nine-pin {
   font-family: "Nine Pin", Monaco, monospace;
   letter-spacing: 2px;
+}
+
+.panel {
+  background-color: var(--fade-bg-color);
+  border-radius: 1.5em;
+  box-shadow: 0px 5px 20px rgba(0,0,0,.5);
+  font-family: "Nine Pin", Monaco, monospace;
+  display: inline-block;
 }
 
 .score-board {
@@ -94,80 +104,100 @@ small {
   text-align: right;
 }
 
-/*
-.stats {
-text-align: right;
-width: var(--full-width);
-padding: 0 0.5em;
-padding-top: 0.5em;
-white-space: pre;
-font-size: .8em;
+.toolbar {
+  position: absolute;
+  top: 30%;
+  right: 2em;
+  font-size: .8em;
+  padding: 0.5em;
 }
- */
-  /*
-  .menu {
-  display: none;
-  background-color: var(--fade-bg-color);
-  display: flex;
-  flex: column;
-  margin-left: 1.5em;
-  width: calc(var(--full-width) - 3em);
 
-  padding: 0 0.5em;
-  margin-top: 1em;
-  padding-bottom: 5px;
-  display: none;
-  border-radius: 1em;
-  opacity: 0;
-  }
-
-  .menu.active {
-  display: block;
-  opacity: 1;
-  }
-   */
-
+@media (min-width: 600px) {
   .toolbar {
-    background-color: var(--fade-bg-color);
-    border-radius: 1.5em;
-    box-shadow: 0px 5px 20px rgba(0,0,0,.5);
-
-    font-family: "Nine Pin", Monaco, monospace;
-    font-size: .6em;
-    padding: 0.5em;
-
-    margin: 2em;
-    float: right;
-    display: inline-block;
-
-    /* position: fixed; */
-    /* right: 2em; */
-    /* top: 8em; */
-    text-align: center;
+    right: calc(50vw - 340px);
   }
+}
 
-  @media (min-width: 600px) {
-    .toolbar {
-      right: calc(50vw - 340px);
-    }
-  }
+.toolbar * {
+}
 
-  .toolbar * {
-    line-height: 2;
-    margin-top: .5em;
-  }
-  .toolbar-header {
-    padding: 0 1em;
-  }
+.toolbar-header {
+  padding-top: .5em;
+}
 
-  .toolbar-tool {
-    line-height: 2;
-    padding: 0 1em;
-    border: 2px solid #888;
-    border-radius: 1.5em;
-    cursor: pointer;
-  }
+.toolbar-tool {
+  line-height: 2;
+  margin-top: .5em;
+  padding: 0 .75em;
+  border: 2px solid #888;
+  border-radius: 1.5em;
+  cursor: pointer;
+}
 
-  .toolbar .selected {
-    border-color: white;
-  }
+.toolbar .selected {
+  border-color: white;
+}
+
+.main-menu {
+  background-color: var(--fade-bg-color);
+  background-color: rgba(51, 64, 74,.9);
+  text-align: center;
+  padding: 1em;
+  margin-top: 30%;
+  box-shadow: 0px 0px 100px rgba(0,0,0,.9);
+}
+
+.main-menu * {
+  margin-bottom: 1em;
+}
+
+.main-menu h6 {
+  font-weight: bold;
+}
+
+.main-menu p {
+  text-align: left;
+  font-family: sans-serif;
+  font-size: 13px;
+}
+
+.main-menu button {
+  display: block;
+  width: 100%;
+}
+
+button {
+  color: white;
+  border: 2px solid #888;
+
+  font-family: "Nine Pin", Monaco, monospace;
+  letter-spacing: 2px;
+
+  background: transparent;
+  border-radius: 1.5em;
+  padding: 0 1em;
+  margin-top: 1em;
+
+  font-size: 1em;
+  line-height: 2;
+
+
+  /* show a hand cursor on hover; some argue that we
+  should keep the default arrow cursor for buttons */
+  cursor: pointer;
+  outline: none;
+}
+
+button:active {
+  transform: scale(.95);
+}
+
+button::-moz-focus-inner {
+  border: none;
+}
+
+button:hover,
+button:focus {
+  border-color: white;
+}
+

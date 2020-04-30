@@ -6,6 +6,7 @@ import {Toolbar, TOOLS} from '../components/toolbar';
 import {ScoreBoard} from '../components/score-board';
 import Board from '../lib/board';
 import Preload from '../lib/preload';
+import {MainMenu} from '../components/main-menu';
 
 
 const natural = {
@@ -13,14 +14,23 @@ const natural = {
     height: 800
 };
 
+
 class Game extends React.Component {
 
     constructor(props) {
         super(props);
+
+        const fetchInt = (key) => {
+            let n = parseInt(localStorage.getItem(key) || 0);
+            return isNaN(n) ? 0 : n;
+        }
+
         this.state = {
             tool: TOOLS[0],
-            score: 0,
-            logs: 'Loading...'
+            score: fetchInt('score'),
+            logs: 'Loading...',
+            showMenu: true,
+            started: false,
         };
     }
 
@@ -88,7 +98,7 @@ class Game extends React.Component {
 
 
     componentWillUnmount() {
-        this.game.scene.restart();
+        // this.game.scene.restart();
     }
 
     resizeContainer() {
@@ -99,20 +109,52 @@ class Game extends React.Component {
     }
 
     restartScene() {
-        // this.game.scene.restart();
+        this.setState({
+            showMenu: false,
+            started: true,
+        });
         this.game.scene.stop('preload', {stage: this.props.map});
         this.game.scene.start('preload', {stage: this.props.map});
         this.game.scene.stop('board', {stage: this.props.map});
         this.game.scene.start('board', {stage: this.props.map});
     }
 
+    togglePause() {
+        this.setState({showMenu: !this.state.showMenu});
+    }
+
     render() {
+        if (this.game && this.game.scene) {
+            if (this.state.showMenu) {
+                this.game.scene.pause('board');
+            } else {
+                this.game.scene.resume('board');
+            }
+        }
         return <div className="game no-select">
-            <ScoreBoard title={this.props.map.name} score={this.state.score} logs={this.state.logs} onClick={() => this.restartScene()} />
-            <Toolbar className="no-select"
-                onChange={(tool) => this.setState({tool})}
+            <ScoreBoard
+                title={this.props.map.name}
+                score={this.state.score}
+                logs={this.state.logs}
+                onClick={() => {
+                    this.setState({showMenu: !this.state.showMenu})
+                }}
             />
-        </div>;
+            <MainMenu
+                active={this.state.showMenu}
+                onRestart={() => this.restartScene()}
+            >
+                {this.state.started && (
+                    <button onClick={() => this.togglePause()} onTouchEnd={() => this.togglePause()}>
+                        Resume
+                    </button>
+                )}
+                <button onClick={() => this.restartScene()} onTouchEnd={() => this.restartScene()}>
+                    {this.state.started ? 'Restart' : 'Start'}
+                </button>
+            </MainMenu>
+            {!this.state.showMenu && this.state.started && <Toolbar className="no-select" onChange={(tool) => this.setState({tool})} /> }
+        </div>
     }
 }
 

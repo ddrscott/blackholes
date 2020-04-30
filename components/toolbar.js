@@ -21,8 +21,8 @@ export function Toolbar({onChange}) {
     }
 
     return <Draggable>
-        <div className="toolbar no-select">
-            <h6 className="toolbar-header">Plop</h6>
+        <div className="panel toolbar no-select">
+            <h6 className="toolbar-header">Drops</h6>
             {
                 TOOLS.map((t) => 
                     <div className={`toolbar-tool ${t == selected && 'selected'}`}
