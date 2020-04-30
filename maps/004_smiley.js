@@ -5,7 +5,7 @@ maps.push({
     ...config,
     name: "Smiley",
     layout: `
-|           O     O           |
+|                             |
 |                             |
 |                             |
 |         ooo  ^  ooo         |

@@ -5,9 +5,9 @@ maps.push({
     ...config,
     name: "Try Angles",
     layout: `
-|           |     |           |
-|           |     |           |
-|           O     O           |
+|                             |
+|                             |
+|                             |
 |     ^                ^      |
 |    ^ ^              ^ ^     |
 |                             |

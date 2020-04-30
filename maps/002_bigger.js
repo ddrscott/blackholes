@@ -5,9 +5,9 @@ maps.push({
     ...config,
     name: "Biggie Size",
     layout: `
-|           |     |           |
-|           |     |           |
-|           O     O           |
+|                             |
+|                             |
+|                             |
 |                             |
 |     O     O     O     O     |
 |                             |

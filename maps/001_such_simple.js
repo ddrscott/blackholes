@@ -5,9 +5,9 @@ maps.push({
     ...config,
     name: "Such Simple",
     layout: `
-|           |     |           |
-|           |     |           |
-|           o     o           |
+|                             |
+|                             |
+|                             |
 |                             |
 |     o     o     o     o     |
 |                             |
