@@ -1,12 +1,12 @@
 import Phaser from 'phaser';
 import RexUIPlugin from 'phaser3-rex-plugins/templates/ui/ui-plugin.js';
-import localForage from "localforage";
 import PropTypes from 'prop-types';
 import React from 'react';
 import {Toolbar, TOOLS} from '../components/toolbar';
 import {ScoreBoard} from '../components/score-board';
 import Board from '../lib/board';
 import Preload from '../lib/preload';
+import {fadeinMusic, fadeoutMusic} from '../lib/music';
 import {MainMenu} from '../components/main-menu';
 
 
@@ -76,8 +76,7 @@ class Game extends React.Component {
         this.game.scene.start('preload', {stage: map});
 
         this.game.events.on('score', (score) => this.setState({score}));
-        this.game.events.on('logs', (logs) => this.setState({logs}));
-        this.game.scale.on('resize', () => this.resizeContainer());
+        this.game.scale.once('resize', () => this.resizeContainer());
 
         document.addEventListener('visibilitychange', () => {
             if (document.visibilityState !== 'visible') {
@@ -126,29 +125,42 @@ class Game extends React.Component {
     }
 
     togglePause() {
-        this.setState({showMenu: !this.state.showMenu});
+        if (this.game.scene.isPaused('board')) {
+            this.setState({showMenu: false});
+            this.game.scene.resume('board');
+        } else {
+            this.setState({showMenu: true});
+            this.game.scene.pause('board');
+        }
+    }
+
+    handleMenu() {
+        if (this.game && this.game.scene) {
+            const board = this.game.scene.getScene('board');
+            if (this.state.showMenu) {
+                board && fadeoutMusic(board, () => this.game.scene.pause('board'));
+            } else {
+                board && fadeinMusic(board, () => this.game.scene.resume('board'));
+            }
+        }
+    }
+
+    selectedTool(tool) {
+        this.setState({tool})
     }
 
     render() {
-        if (this.game && this.game.scene) {
-            if (this.state.showMenu) {
-                this.game.scene.pause('board');
-            } else {
-                this.game.scene.resume('board');
-            }
-        }
         return <div className="game no-select">
             <ScoreBoard
                 title={this.props.map.name}
                 score={this.state.score}
                 logs={this.state.logs}
                 onClick={() => {
-                    this.setState({showMenu: !this.state.showMenu})
+                    this.togglePause();
                 }}
             />
             <MainMenu
                 active={this.state.showMenu}
-                onRestart={() => this.restartScene()}
             >
                 {this.state.started && (
                     <button onClick={() => this.togglePause()} onTouchEnd={() => this.togglePause()}>
@@ -159,7 +171,7 @@ class Game extends React.Component {
                     {this.state.started ? 'Restart' : 'Start'}
                 </button>
             </MainMenu>
-            {!this.state.showMenu && this.state.started && <Toolbar className="no-select" onChange={(tool) => this.setState({tool})} /> }
+            {!this.state.showMenu && this.state.started && <Toolbar className="no-select" onChange={(tool) => this.selectedTool(tool)} /> }
         </div>
     }
 }
