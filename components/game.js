@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import RexUIPlugin from 'phaser3-rex-plugins/templates/ui/ui-plugin.js';
+import localForage from "localforage";
 import PropTypes from 'prop-types';
 import React from 'react';
 import {Toolbar, TOOLS} from '../components/toolbar';
@@ -78,6 +79,11 @@ class Game extends React.Component {
         this.game.events.on('logs', (logs) => this.setState({logs}));
         this.game.scale.on('resize', () => this.resizeContainer());
 
+        document.addEventListener('visibilitychange', () => {
+            if (document.visibilityState !== 'visible') {
+                this.setState({showMenu: true});
+            }
+        });
         this.resizeContainer();
     }
 
