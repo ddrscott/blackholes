@@ -78,6 +78,8 @@ small {
   background-color: var(--fade-bg-color);
   display: flex;
   flex: row;
+  align-items: center;
+  height: 48px;
   /* max-width: var(--full-width); */
   padding: 0 0.5em;
   padding-bottom: 5px;
@@ -207,11 +209,11 @@ button:focus {
 }
 
 [class^="icon-"] {
-  display: inline-block;
-  margin-top: 0.5em;
+  display: block;
+  /* margin-top: 0.5em; */
   margin-left: 0.5em;
-  height: 1.5em;
-  width: 1.5em;
+  height: 2em;
+  width: 2em;
   color: white;
   background-size: contain;
   background-color: #888;
