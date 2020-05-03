@@ -13,7 +13,7 @@
     "localforage": "^1.7.3",
     "next": ">=9.3.2",
     "next-fonts": "^1.1.0",
-    "phaser": "^3.22.0",
+    "phaser": "^3.23.0",
     "phaser3-rex-plugins": "^1.1.13",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
