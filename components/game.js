@@ -113,8 +113,6 @@ class Game extends React.Component {
         this.setState({ showMenu: false, started: true });
 
         const opts = {stage: this.props.map};
-        this.game.scene.stop('preload', opts);
-        this.game.scene.start('preload', opts);
         this.game.scene.stop('board', opts);
         this.game.scene.start('board', opts);
     }
