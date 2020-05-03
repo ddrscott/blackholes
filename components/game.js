@@ -1,12 +1,12 @@
 import Phaser from 'phaser';
 import RexUIPlugin from 'phaser3-rex-plugins/templates/ui/ui-plugin.js';
+import {MatterAttractors} from '../lib/attractors';
 import PropTypes from 'prop-types';
 import React from 'react';
 import {Toolbar, TOOLS} from '../components/toolbar';
 import {ScoreBoard} from '../components/score-board';
 import Board from '../lib/board';
 import Preload from '../lib/preload';
-import {fadeinMusic, fadeoutMusic} from '../lib/music';
 import {MainMenu} from '../components/main-menu';
 
 
@@ -51,11 +51,6 @@ class Game extends React.Component {
             // },
             physics: {
                 default: 'matter',
-                matter: {
-                    plugins: {
-                        attractors: true,
-                    }
-                }
             },
             scale: {
                 mode: Phaser.Scale.FIT,
@@ -64,14 +59,15 @@ class Game extends React.Component {
             disableContextMenu: true,
             scene: [Preload, Board],
             plugins: {
-                scene: [{
-                    key: 'rexUI',
-                    plugin: RexUIPlugin,
-                    mapping: 'rexUI'
-                },
+                scene: [
+                    { key: 'rexUI', plugin: RexUIPlugin, mapping: 'rexUI' },
                 ]
             }
         });
+
+        const {Matter} = Phaser.Physics.Matter;
+        Matter.use(Matter, MatterAttractors);
+
         this.game.getState = (k) => this.state[k];
         this.game.scene.start('preload', {stage: map});
 
@@ -114,17 +110,17 @@ class Game extends React.Component {
     }
 
     restartScene() {
-        this.setState({
-            showMenu: false,
-            started: true,
-        });
-        this.game.scene.stop('preload', {stage: this.props.map});
-        this.game.scene.start('preload', {stage: this.props.map});
-        this.game.scene.stop('board', {stage: this.props.map});
-        this.game.scene.start('board', {stage: this.props.map});
+        this.setState({ showMenu: false, started: true });
+
+        const opts = {stage: this.props.map};
+        this.game.scene.stop('preload', opts);
+        this.game.scene.start('preload', opts);
+        this.game.scene.stop('board', opts);
+        this.game.scene.start('board', opts);
     }
 
     togglePause() {
+        //const board = this.game.scene.getScene('board');
         if (this.game.scene.isPaused('board')) {
             this.setState({showMenu: false});
             this.game.scene.resume('board');
@@ -134,16 +130,6 @@ class Game extends React.Component {
         }
     }
 
-    handleMenu() {
-        if (this.game && this.game.scene) {
-            const board = this.game.scene.getScene('board');
-            if (this.state.showMenu) {
-                board && fadeoutMusic(board, () => this.game.scene.pause('board'));
-            } else {
-                board && fadeinMusic(board, () => this.game.scene.resume('board'));
-            }
-        }
-    }
 
     selectedTool(tool) {
         this.setState({tool})
