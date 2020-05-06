@@ -12,7 +12,7 @@ import {MainMenu} from '../components/main-menu';
 
 const natural = {
     width: 480,
-    height: 800
+    height: 800,
 };
 
 
@@ -29,7 +29,7 @@ class Game extends React.Component {
         this.state = {
             tool: TOOLS[0],
             score: fetchInt('score'),
-            logs: 'Loading...',
+            title: '',
             showMenu: true,
             started: false,
         };
@@ -51,6 +51,9 @@ class Game extends React.Component {
             // },
             physics: {
                 default: 'matter',
+                matter: {
+                    debug: false,
+                }
             },
             scale: {
                 mode: Phaser.Scale.FIT,
@@ -71,8 +74,10 @@ class Game extends React.Component {
         this.game.getState = (k) => this.state[k];
         this.game.scene.start('preload', {stage: map});
 
+        this.game.events.on('points', ({points}) => this.setState({score: this.state.score + points}));
         this.game.events.on('score', (score) => this.setState({score}));
-        this.game.scale.once('resize', () => this.resizeContainer());
+        this.game.events.on('title', (title) => this.setState({title}));
+        this.game.scale.on('resize', () => this.resizeContainer());
 
         document.addEventListener('visibilitychange', () => {
             if (document.visibilityState !== 'visible') {
@@ -136,7 +141,7 @@ class Game extends React.Component {
     render() {
         return <div className="game no-select">
             <ScoreBoard
-                title={this.props.map.name}
+                title={this.state.title}
                 score={this.state.score}
                 logs={this.state.logs}
                 onClick={() => {
@@ -155,7 +160,7 @@ class Game extends React.Component {
                     {this.state.started ? 'Restart' : 'Start'}
                 </button>
             </MainMenu>
-            {!this.state.showMenu && this.state.started && <Toolbar className="no-select" onChange={(tool) => this.selectedTool(tool)} /> }
+            { /* !this.state.showMenu && this.state.started && <Toolbar className="no-select" onChange={(tool) => this.selectedTool(tool)} /> */}
         </div>
     }
 }

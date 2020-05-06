@@ -4,11 +4,6 @@ import styled from 'styled-components';
 import dynamic from 'next/dynamic'
 
 import '../maps/001_such_simple';
-import '../maps/002_bigger';
-import '../maps/003_wedgy';
-import '../maps/004_smiley';
-import '../maps/005_try_angles';
-import '../maps/006_just_air';
 import maps from '../maps';
 
 const Game = dynamic(() => import('../components/game'), { ssr: false });

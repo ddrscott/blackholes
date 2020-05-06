@@ -3,12 +3,11 @@ import PropTypes from 'prop-types';
 
 export function MainMenu({children, active}) {
     return <div className={`panel main-menu nine-pin ${active || 'hidden'}`}>
-        <h1>Droppings</h1>
+        <h1>{document.title}</h1>
         <p>
-           * Clicks/Taps gets Drops<br/>
-           * Drops get Points<br/>
-           * Points get Stages<br/>
-           * Stages get Drops<br/>
+           * Make Black Holes<br/>
+           * Collect Stars N'Stuff<br/>
+           * Small Hole, Big Points<br/>
         </p>
         {children}
     </div>

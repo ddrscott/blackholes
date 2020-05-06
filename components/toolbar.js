@@ -2,14 +2,10 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Draggable from 'react-draggable';
 
-import Puck from '../lib/tools/puck';
-import Biggy from '../lib/tools/biggy';
-import Gravity from '../lib/tools/gravity';
+import Hole from '../lib/tools/hole';
 
 export const TOOLS = [
-    new Puck(),
-    new Biggy(),
-    new Gravity(),
+    new Hole(),
 ]
 
 export function Toolbar({onChange}) {
@@ -22,7 +18,7 @@ export function Toolbar({onChange}) {
 
     return <Draggable>
         <div className="panel toolbar no-select">
-            <h6 className="toolbar-header">Drops</h6>
+            <h6 className="toolbar-header">Hole</h6>
             {
                 TOOLS.map((t) => 
                     <div className={`toolbar-tool ${t == selected && 'selected'}`}

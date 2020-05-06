@@ -5,7 +5,7 @@ export function ScoreBoard({title, score, log, onClick, onFullScreen}) {
     return <>
         <div className="score-board nine-pin" onClick={onClick}>
             <div className="score-board-left">
-                <label className="score-board-label">stage</label>
+                <label className="score-board-label">Holes</label>
                 <div className="stage">{title}</div>
             </div>
             <div className="score-board-center">
@@ -13,7 +13,7 @@ export function ScoreBoard({title, score, log, onClick, onFullScreen}) {
                 <div className="score">{score}</div>
             </div>
             <div className="score-board-right">
-                <i className="icon-caret-down"></i>
+                {/*<i className="icon-caret-down"></i>*/}
             </div>
         </div>
     </>
