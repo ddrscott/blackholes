@@ -79,11 +79,11 @@ class Game extends React.Component {
         this.game.events.on('title', (title) => this.setState({title}));
         this.game.scale.on('resize', () => this.resizeContainer());
 
-        document.addEventListener('visibilitychange', () => {
-            if (document.visibilityState !== 'visible') {
-                this.setState({showMenu: true});
-            }
-        });
+        // document.addEventListener('visibilitychange', () => {
+        //     if (document.visibilityState !== 'visible') {
+        //         this.setState({showMenu: true});
+        //     }
+        // });
         this.resizeContainer();
     }
 
